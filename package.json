@@ -1,0 +1,28 @@
+{
+  "name": "ultimate_todo_list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node ./dev/server.ts",        
+    "start": "nodemon ./prod/server.js",
+    "prod": "npm run build && npm run start"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adil-Altaf/Ultimate_ToDo_List.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adil-Altaf/Ultimate_ToDo_List/issues"
+  },
+  "homepage": "https://github.com/Adil-Altaf/Ultimate_ToDo_List#readme",
+  "dependencies": {
+    "@types/express": "^4.16.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.14"
+  }
+}
