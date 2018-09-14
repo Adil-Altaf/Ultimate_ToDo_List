@@ -38,7 +38,7 @@
                 <tr>
                     <td colspan="3">
                         <br />
-                        <input type="button" value="Add Task" class="buttonStyle" onclick="alert('This is static page, more functionality to come!!');">
+                        <input type="button" value="Add Task" class="buttonStyle" onclick="validateTaskInput();">
                     </td>
                 </tr>
             </table>
@@ -55,10 +55,7 @@
                 <thead class="makeItCenter">
                     <tr class="bgDarkGray">
                         <td>
-                            Serial #
-                        </td>
-                        <td>
-                            ID
+                            Task ID
                         </td>
                         <td>
                             Task Title
@@ -77,27 +74,8 @@
                         </td>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            005456
-                        </td>
-                        <td>
-                            Meeting
-                        </td>
-                        <td>
-                            There is a meeting today at 6pm - venue: Axiom
-                        </td>
-                        <td class="makeItCenter">
-                            <img src="images/right_tick.png" alt="Task done!">
-                        </td>
-                        <td class="makeItCenter">
-                            <img src="images/wrong_tick.png" alt="Remove Task!">
-                        </td>
-                    </tr>
+                <tbody id="tasksTableBody">
+                    <!-- Dynamic rows will come here-->
                 </tbody>
             </table>
         </fieldset>
