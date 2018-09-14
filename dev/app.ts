@@ -11,7 +11,7 @@ class App {
     //making route object from Route class 
     public route: Routes = new Routes();
     //this is database url 
-    public mongoUrl: string = 'mongodb://todo:alpha1411@ds155862.mlab.com:55862/ultimate_todo_app'
+    public mongoUrl: string = 'mongodb://localhost:27017/Ultimate_Todo_App'
 
     constructor() {
         this.app = express();
