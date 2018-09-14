@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    font-family: calibri, Helvetica,sans-serif;
+    font-size: 1.5em;
+    background-color: black;
+    color: gray;
+}
+
+.toDoList {
+    font-size: 1.5em;
+    text-align: center;
+    margin-top: 50px; 
+}
+
+input[type=text] {
+    width: 400px;
+}
+
+.hideElement {
+    display: none;
+}
+
+.unHideElement {
+    display: block;
+}
+
+textarea {
+    height: 150px;
+}
+
+
+.textFieldStyle{
+    width: 80%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: rgb(235,235,235);
+    font-size: 16px;
+    resize: none;
+}
+
+.buttonStyle {
+    float: right;
+    background-color: black;
+    font-weight: bold;
+    color: gray;
+    font-size: 1.2em;
+}
+
+.width100 {
+    width: 100%;
+}
+
+.makeItCenter{
+    margin: 0 auto 0 auto;
+    text-align: center;
+}
+
+.width70 {
+    width: 70%;
+}
+
+.fieldLabel {
+    display: block; 
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.borderShadow {
+    box-shadow: 5px 8px 20px 5px rgb(34,34 ,34);
+}
+
+.bgDarkGray {
+    background-color: rgb(34,34 ,34); 
+}
+
+.font1_2 {
+    font-size: .7em;
+}
