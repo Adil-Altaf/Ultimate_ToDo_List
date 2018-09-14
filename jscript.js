@@ -22,8 +22,8 @@ function clearFields() {
 
 function addTask(title, desc) {  // function to add task
 
-    var htmlText = `<tr id='task_row_${idCounter}'><td class='makeItCenter'>${idCounter+1}</td>`;
-    htmlText += `<td> ${title} </td><td> ${desc} </td> `;
+    var htmlText = `<tr id='task_row_${idCounter}'><td class='makeItCenter'>${idCounter + 1}</td>`;
+    htmlText += `<td> ${changeCase(title)} </td><td> ${changeCase(desc)} </td> `;
     htmlText += `<td class='makeItCenter'><img src='images/right_tick.png' alt='Task done!' id='row_img_${idCounter}' onclick="task_done('row_img_${idCounter}');"></td>`;
     htmlText += `<td class='makeItCenter'><img src='images/wrong_tick.png' alt='Remove Task!' onclick="delete_task('task_row_${idCounter}');"></td></tr>`;
 
