@@ -70,10 +70,10 @@ export class TodoController {
               client
                 .end()
                 .then(() => {
-                  return res.json(results);
+                  return res.status(200).json(results);
                 })
                 .catch(err => {
-                  console.log("Err: ", err);
+                  //console.log("Err: ", err);
                 });
             });
           })
@@ -95,7 +95,7 @@ export class TodoController {
       .connect()
       .then(() => {
         client.query('SELECT * FROM todoList where id=($1)', [id]).then((result) => {
-        res.json(result.rows);  
+        res.status(200).json(result.rows);  
         }).catch((err) => {
           console.log(err);
         return res.status(500).json({ success: false, data: err });  

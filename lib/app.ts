@@ -33,7 +33,7 @@ class App {
       }
       // connection established
       client.query(
-        "CREATE TABLE todos (id SERIAL PRIMARY KEY, todoTitle VARCHAR(40), todoDescription VARCHAR(80), todoDate date, done bool DEFAULT false )",
+        "SELECT NOW()",
         function(err, result) {
           // if error occurs on query then return error on console
           if (err) {
