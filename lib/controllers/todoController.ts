@@ -89,7 +89,7 @@ export class TodoController {
   }
 
   public getTodoWithID(req: Request, res: Response) {
-    const id = req.params.todoid;
+    const id = req.params.id;
     var client = new Client(connectionString);
     client
       .connect()
@@ -108,7 +108,7 @@ export class TodoController {
 
   public updateTodo(req: Request, res: Response) {
     const results = [];
-    const id = req.params.todoid;
+    const id = req.params.id;
     const { todoTitle, todoDescription, complete } = req.body;
     const data = {
       todoTitle,
@@ -158,7 +158,7 @@ export class TodoController {
 
   public deleteTodo(req: Request, res: Response) {
     const results = [];
-    const id = req.params.todoid;
+    const id = req.params.id;
     var client = new Client(connectionString);
     console.log("HIT DELETE");
     client
