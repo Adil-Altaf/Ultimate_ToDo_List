@@ -1,16 +1,43 @@
 import React, { Component } from 'react';
 
 class Todo extends Component {
+
     constructor() {
-        super()
+        super();
+        this.state = {
+            title: '',
+            description: ''
+        }
     }
 
+    updateTitle(title){
+        console.log(title);
+        this.setState({title:title}) 
+    }
 
     inputField() {
+        const { title, description } = this.state;
         return (
             <form className="form" >
-                <input type="text" />
-                <button style={{marginLeft:5}}>
+                <div>
+                    <label style={{ marginRight: 2 }}>
+                        Title
+                    <input
+                            value={title}
+                            onChange={(e) => this.updateTitle(e.target.value)}
+                            type="text"
+                            className="form-control"
+                        />
+                    </label>
+                    <label style={{ marginLeft: 2 }} >
+                        Description
+                    <input
+                            type="text"
+                            className="form-control"
+                        />
+                    </label>
+                </div>
+                <button className="btn btn-primary">
                     Add Todo
                 </button>
             </form>

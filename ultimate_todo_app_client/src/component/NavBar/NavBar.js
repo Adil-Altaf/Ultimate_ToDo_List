@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 const NavBar = (props) => {
     return (
         <div>
-            <AppBar position="static" style={{backgroundColor:'purple',textAlign:'center'}} >
-                <Toolbar style={{textAlign:'center'}}>
+            <AppBar position="static" style={{backgroundColor:'purple'}} >
+                <Toolbar style={{textAlign:'center',margin:'auto'}}>
                     <Typography variant="title" color="inherit" >
                         {props.children}
                     </Typography>

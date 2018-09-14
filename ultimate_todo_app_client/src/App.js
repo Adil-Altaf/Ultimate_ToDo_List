@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar>
-          Todo App
+          Ultimate Todo App
         </NavBar>
         <Todo />
       </div>
