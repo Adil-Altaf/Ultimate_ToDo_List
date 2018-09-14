@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./dev/server.ts",        
+    "dev": "ts-node ./dev/server.ts",
     "start": "nodemon ./prod/server.js",
     "prod": "npm run build && npm run start"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Adil-Altaf/Ultimate_ToDo_List.git"
