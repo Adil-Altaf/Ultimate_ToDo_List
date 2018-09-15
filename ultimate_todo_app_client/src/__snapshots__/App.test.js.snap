@@ -1,0 +1,188 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App has a valid snapshot 1`] = `
+<div
+  className="App"
+>
+  <div>
+    <header
+      className="MuiPaper-root-075 MuiPaper-elevation4-081 MuiAppBar-root-066 MuiAppBar-positionStatic-070 MuiAppBar-colorPrimary-073"
+      style={
+        Object {
+          "backgroundColor": "purple",
+        }
+      }
+    >
+      <div
+        className="MuiToolbar-root-0102 MuiToolbar-regular-0104 MuiToolbar-gutters-0103"
+        style={
+          Object {
+            "margin": "auto",
+            "textAlign": "center",
+          }
+        }
+      >
+        <h2
+          className="MuiTypography-root-0106 MuiTypography-title-0112 MuiTypography-colorInherit-0125"
+        >
+          Ultimate Todo App
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div
+    style={
+      Object {
+        "textAlign": "center",
+      }
+    }
+  >
+    <h1>
+      TodoApp
+    </h1>
+    <form
+      className="form"
+      onSubmit={[Function]}
+    >
+      <div>
+        <label
+          style={
+            Object {
+              "marginRight": 2,
+            }
+          }
+        >
+          Title
+          <input
+            className="form-control"
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </label>
+        <div>
+          <label
+            style={
+              Object {
+                "marginLeft": 2,
+              }
+            }
+          >
+            Description
+            <textarea
+              className="form-control"
+              onChange={[Function]}
+              required={true}
+              type="text"
+              value=""
+            />
+          </label>
+        </div>
+      </div>
+      <button
+        className="btn btn-primary"
+      >
+        Add Todo
+      </button>
+    </form>
+    <div>
+      <ul
+        className="listStyle"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`NavBar also has a valid snapshot 1`] = `
+<div>
+  <header
+    className="MuiPaper-root-075 MuiPaper-elevation4-081 MuiAppBar-root-066 MuiAppBar-positionStatic-070 MuiAppBar-colorPrimary-073"
+    style={
+      Object {
+        "backgroundColor": "purple",
+      }
+    }
+  >
+    <div
+      className="MuiToolbar-root-0102 MuiToolbar-regular-0104 MuiToolbar-gutters-0103"
+      style={
+        Object {
+          "margin": "auto",
+          "textAlign": "center",
+        }
+      }
+    >
+      <h2
+        className="MuiTypography-root-0106 MuiTypography-title-0112 MuiTypography-colorInherit-0125"
+      />
+    </div>
+  </header>
+</div>
+`;
+
+exports[`Todos has a valid snapshot 1`] = `
+<div
+  style={
+    Object {
+      "textAlign": "center",
+    }
+  }
+>
+  <h1>
+    TodoApp
+  </h1>
+  <form
+    className="form"
+    onSubmit={[Function]}
+  >
+    <div>
+      <label
+        style={
+          Object {
+            "marginRight": 2,
+          }
+        }
+      >
+        Title
+        <input
+          className="form-control"
+          onChange={[Function]}
+          required={true}
+          type="text"
+          value=""
+        />
+      </label>
+      <div>
+        <label
+          style={
+            Object {
+              "marginLeft": 2,
+            }
+          }
+        >
+          Description
+          <textarea
+            className="form-control"
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </label>
+      </div>
+    </div>
+    <button
+      className="btn btn-primary"
+    >
+      Add Todo
+    </button>
+  </form>
+  <div>
+    <ul
+      className="listStyle"
+    />
+  </div>
+</div>
+`;
