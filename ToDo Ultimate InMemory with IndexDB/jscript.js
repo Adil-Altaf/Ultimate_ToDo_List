@@ -1,19 +1,4 @@
-var taskArrayMain = [];
 var idCounter = 0;
-
-function returnTask(id,taskTitle, TaskDesc) {
-
-    var task = {
-        taskId: id,
-        taskTitle: taskTitle,
-        TaskDesc: TaskDesc
-    };
-
-    idCounter = id;
-    clearFields();
-    return task;
-}
-
 
 function clearFields() {
     document.getElementById("txtTitle").value = "";
@@ -21,16 +6,26 @@ function clearFields() {
     document.getElementById("txtTitle").focus();
 }
 
-function addTask(id, title, desc, addToIndexDBFlag) {  // function to add task
+function addTask(id, title, desc, status, addToIndexDBFlag) {  // function to add task
+    var img;
+    var varOnClick;
+    if (status) {
+        img = "done";
+        varOnClick = ""
+    } else {
+        img = "right_tick";
+        varOnClick = `task_done('row_img_${id}');`
+    }
 
     var htmlText = `<tr id='task_row_${id}'><td class='makeItCenter'>${id}</td>`;
     htmlText += `<td> ${changeCase(title)} </td><td> ${changeCase(desc)} </td> `;
-    htmlText += `<td class='makeItCenter'><img src='images/right_tick.png' alt='Task done!' id='row_img_${id}' onclick="task_done('row_img_${id}');"></td>`;
+    htmlText += `<td class='makeItCenter'><img src='images/${img}.png' alt='Task done!' id='row_img_${id}' onclick="${varOnClick}"></td>`;
     htmlText += `<td class='makeItCenter'><img src='images/wrong_tick.png' alt='Remove Task!' onclick="delete_task('task_row_${id}');"></td></tr>`;
 
     document.getElementById('tasksTableBody').innerHTML += htmlText;
 
-    taskArrayMain.push(returnTask(id,title, desc));
+    idCounter = id;
+    clearFields();
 
     if (addToIndexDBFlag) {
         addRecord(idCounter, title, desc);
@@ -39,7 +34,10 @@ function addTask(id, title, desc, addToIndexDBFlag) {  // function to add task
 
 function task_done(row_id) {
     document.getElementById(row_id).setAttribute("src", "images/done.png");
+    document.getElementById(row_id).setAttribute("onclick", "");
+    updateTaskStatus(Number(row_id.slice(8, row_id.length)));
 }
+
 function delete_task(taskid) {  // this funciton is to delete to do task from list
     var varTask = document.getElementById(taskid);
     var parId = varTask.parentElement;
@@ -54,11 +52,6 @@ function delete_task(taskid) {  // this funciton is to delete to do task from li
         }
     }
 
-    for (var i = 0; i < taskArrayMain.length; i++) {
-        if (taskArrayMain[i].taskid === taskid) {
-            taskArrayMain.splice(i, 1);
-        }
-    }
     removeRecord(Number(taskid.slice(9, taskid.length)));
 }
 
@@ -81,7 +74,7 @@ function validateTaskInput() {
     }
 
     if (allOkFlag) {
-        addTask(++idCounter, varTaskTitle.value.trim(), varTaskDesc.value.trim(), true);
+        addTask(++idCounter, varTaskTitle.value.trim(), varTaskDesc.value.trim(), false, true);
     }
 
 }

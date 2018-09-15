@@ -12,7 +12,7 @@ var database_name = "toDoDatabase",
     index;
 
 database_system.onupgradeneeded = function (e) {
-     db = database_system.result,
+    db = database_system.result,
         table_store = db.createObjectStore("taskListTable", { keyPath: "task_id" });
 
     // I am skiping index part for now
@@ -42,12 +42,13 @@ database_system.onsuccess = function (e) {
 
     getAllRecords();
     tranx.oncomplete = function () {
-    //    db.close();
+        //        db.close();
     }
 };
 
 
 function getAllRecords() {
+    var countRec = 0;
     db = database_system.result;
     tranx = db.transaction("taskListTable", "readwrite");
     table_store = tranx.objectStore("taskListTable");
@@ -56,25 +57,51 @@ function getAllRecords() {
 
         var cursor = e.target.result;
         if (cursor) {
-            addTask(cursor.value.task_id, cursor.value.taskTitle, cursor.value.taskDesc, false);
+            addTask(cursor.value.task_id, cursor.value.taskTitle, cursor.value.taskDesc, cursor.value.status, false);
+            countRec++;
             cursor.continue();
         } else {
-            console.log("records retrieved from indexDB");
+            console.log(countRec + " records retrieved from indexDB");
         }
     }
 }
 
+function updateTaskStatus(t_id) {
+    db = database_system.result,
+        tranx = db.transaction("taskListTable", "readwrite"),
+        table_store = tranx.objectStore("taskListTable");
+
+    var record = table_store.get(t_id);
+
+    record.onsuccess = function () {
+        var currentRec = record.result
+        currentRec.status = true;
+
+        var updateRecord = table_store.put(currentRec);
+        updateRecord.onsuccess = function () {
+            console.log("Record updated!");
+        }
+        updateRecord.onerror = function (e) {
+            console.log("Error occured:" + e.target.errorCode);
+        }
+
+    }
+    record.onerror = function (e) {
+        console.log("Error occured:" + e.target.errorCode);
+    }
+}
 
 function addRecord(t_id, title, description) {
     db = database_system.result;
-    var tranx = db.transaction("taskListTable", "readwrite"),
-        table_store = tranx.objectStore("taskListTable"),
-        result = table_store.put({
-            task_id: t_id,
-            taskTitle: title,
-            taskDesc: description,
-            status: false
-        });
+    tranx = db.transaction("taskListTable", "readwrite"),
+        table_store = tranx.objectStore("taskListTable");
+
+    var result = table_store.put({
+        task_id: t_id,
+        taskTitle: title,
+        taskDesc: description,
+        status: false
+    });
 
     result.onsuccess = function () {
         console.log("Record Added!");
@@ -86,9 +113,9 @@ function addRecord(t_id, title, description) {
 
 function removeRecord(t_id) {
     db = database_system.result;
-    var tranx = db.transaction("taskListTable", "readwrite"),
-        table_store = tranx.objectStore("taskListTable"),
-        result = table_store.delete(t_id);
+    tranx = db.transaction("taskListTable", "readwrite"),
+        table_store = tranx.objectStore("taskListTable");
+    var result = table_store.delete(t_id);
 
     result.onsuccess = function () {
         console.log("Record for Task ID - ", t_id, " deleted!");
@@ -97,16 +124,3 @@ function removeRecord(t_id) {
         console.log("Error occured:" + e.target.errorCode);
     }
 }
-
-function deleteRecord1(t_id) {
-    db = database_system.result;
-    var temp_database = db.transaction(["taskList"], "readwrite")
-        .objectStore("taskList")
-        .delete(task_id);
-
-    temp_database.onsuccess = function () {
-        console.log("Task deleted!");
-    };
-
-}
-
