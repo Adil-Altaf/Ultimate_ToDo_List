@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../../Style/todo.css';
 
 class Todo extends Component {
 
@@ -23,7 +24,7 @@ class Todo extends Component {
     submitForm(e) {
         e.preventDefault();
         const { title, description, todos } = this.state;
-        todos.push({ title, description });
+        todos.push({ title, description, completed: false });
         this.setState({ todos, title: '', description: '' });
     }
 
@@ -33,12 +34,20 @@ class Todo extends Component {
             if (index1 !== index) {
                 return true
             }
+            else{
+                return false
+            }
 
         });
-        this.setState({todos:updated})
+        this.setState({ todos: updated })
         console.log(updated);
 
 
+    }
+    edit(index) {
+        const { todos } = this.state;
+        todos[index].completed = !todos[index].completed;
+        this.setState(todos);
     }
 
     inputField() {
@@ -49,21 +58,25 @@ class Todo extends Component {
                     <label style={{ marginRight: 2 }}>
                         Title
                         <input
+                            required
                             value={title}
                             onChange={(e) => this.updateTitle(e.target.value)}
                             type="text"
                             className="form-control"
                         />
                     </label>
-                    <label style={{ marginLeft: 2 }} >
-                        Description
-                        <input
-                            value={description}
-                            onChange={(e) => this.updateDescription(e.target.value)}
-                            type="text"
-                            className="form-control"
-                        />
-                    </label>
+                    <div>
+                        <label style={{ marginLeft: 2 }} >
+                            Description
+                        <textarea
+                                required
+                                value={description}
+                                onChange={(e) => this.updateDescription(e.target.value)}
+                                type="text"
+                                className="form-control"
+                            />
+                        </label>
+                    </div>
                 </div>
                 <button className="btn btn-primary">
                     Add Todo
@@ -74,17 +87,42 @@ class Todo extends Component {
     unorderList() {
         const { todos } = this.state;
         return (
-            <ul>
-                {todos.map((list, index) => {
-                    return (
-                        <li>
-                            {list.title}-{list.description}
-                            <button>Edit</button>
-                            <button onClick={() => this.deleteList(index)} >Delete</button>
-                        </li>
-                    )
-                })}
-            </ul>
+            <div>
+
+                <ul className='listStyle'>
+                    {todos.map((list, index) => {
+                        return (
+                            <li key={index + list.title}>
+                                {list.completed ?
+                                    <span className='completed'>
+                                        {list.title}-{list.description}
+                                    </span>
+
+                                    :
+
+                                    <span className=''>
+                                        {list.title}-{list.description}
+                                    </span>
+
+
+                                }
+                                <span className="delete" >
+                                    {list.completed ?
+                                        <i className="fa fa-check-square-o actionButton edit1" onClick={() => this.edit(index)}></i>
+
+                                        :
+
+                                        <i className="fa fa-square-o actionButton edit1" onClick={() => this.edit(index)}></i>
+                                    }
+
+                                    <i className="fa fa-remove actionButton delete1" onClick={() => this.deleteList(index)} ></i>
+                                </span>
+                                <hr />
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
         )
     }
 
