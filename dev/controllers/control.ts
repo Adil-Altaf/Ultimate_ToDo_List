@@ -36,7 +36,7 @@ export class TaskController {
     public getTask(req: Request, res: Response) {
         Task.findById(req.params.task_id, (err, task) => {
             if (err) {
-                return res.send(err);
+                return res.status(404).send(err);
             }
             return res.json(task);
         });
@@ -47,16 +47,16 @@ export class TaskController {
         Task.findOneAndUpdate({ _id: req.params.task_id },
             req.body, { new: true }, (err, task) => {
                 if (err) {
-                    return res.send(err);
+                    return res.status(404).send(err);
                 }
                 return res.json(task);
             });
     }
     //This logic is for delete a task by its id
     public deleteTask(req: Request, res: Response) {
-        Task.remove({ _id: req.params.task_id }, (err, task) => {
+        Task.findOneAndDelete({ _id: req.params.task_id }, (err, task) => {
             if (err) {
-                return res.send(err);
+                return res.status(404).send(err);   
             }
             return res.json({ message: 'Successfully deleted Task!' });
         });

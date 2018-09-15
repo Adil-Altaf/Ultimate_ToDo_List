@@ -22,7 +22,7 @@ describe('API Routes', function() {
       describe('POST /todo/api/v1.0/tasks/:id', function() {
         it('should return tasks by id', function(done) {
           chai.request(server)
-          .get('/todo/api/v1.0/tasks/1')
+          .get('/todo/api/v1.0/tasks/5b9b8017aac1cc0be067d9f4')
           .end(function(err, res) {
             res.should.have.status(200);
           done();
@@ -33,7 +33,8 @@ describe('API Routes', function() {
       describe('PUT /todo/api/v1.0/tasks/:id', function() {
         it('should update tasks by id', function(done) {
           chai.request(server)
-          .get('/todo/api/v1.0/tasks/1')
+          .put('/todo/api/v1.0/tasks/5b9b8017aac1cc0be067d9f4')
+          .set('done',true)
           .end(function(err, res) {
             res.should.have.status(200);
           done();
@@ -44,7 +45,7 @@ describe('API Routes', function() {
       describe('DELETE /todo/api/v1.0/tasks/:id', function() {
         it('should delete tasks by id', function(done) {
           chai.request(server)
-          .get('/todo/api/v1.0/tasks/1')
+          .delete('/todo/api/v1.0/tasks/5b9b8019aac1cc0be067d9f7')
           .end(function(err, res) {
             res.should.have.status(200);
           done();
