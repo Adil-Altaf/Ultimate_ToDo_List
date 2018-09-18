@@ -48,6 +48,13 @@ class App {
         this.app.use(bodyParser.json());
         //support application/x-www-form-urlencoded post data
         this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Credentials', 'true');
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+            next();
+        });
     }
 }
 // creating the App class instance and export it into server.ts

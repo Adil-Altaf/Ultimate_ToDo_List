@@ -7,11 +7,11 @@
     "lib": "lib"
   },
   "scripts": {
+    "dev": "ts-node-dev --respawn --transpileOnly lib/server.ts",
     "build": "tsc",
-    "dev": "nodemon --watch 'lib/**/*.ts' --ignore 'lib/test/**/*.spec.ts' --exec ts-node lib/server.ts",
     "start": "nodemon ./dist/server.js",
     "prod": "npm run build && npm run start",
-    "test": "mocha -r ts-node/register lib/test/**/*.spec.ts"
+    "test": "mocha --timeout 15000 -r ts-node/register lib/test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "nodemon": "^1.18.4",
-    "pg": "^7.4.3"
+    "pg": "^7.4.3",
+    "ts-node-dev": "^1.0.0-pre.30"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",

@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-// import { Client } from "pg";
 import { Client } from "pg";
 const connectionString =
   "postgres://ycdrsdkz:VCNlVKZ--PJLCHozzG9gQVrKhU_OEJdj@stampy.db.elephantsql.com:5432/ycdrsdkz";
@@ -13,11 +12,10 @@ export class TodoController {
       todoDescription,
       complete: false
     };
-    var client = new Client(connectionString);
-    client.connect(err => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ success: false, data: err });
+    const client: any = new Client(connectionString);
+    client.connect(error => {
+      if (error) {
+        return res.status(500).json({ success: false, error: error });
       }
       client
         .query(
@@ -25,30 +23,9 @@ export class TodoController {
           [data.todoTitle, data.todoDescription, data.complete]
         )
         .then(result1 => {
-          client
-            .query("SELECT * FROM todoList ORDER BY id asc")
-            .then(result2 => {
-              result2.rows.forEach(row => {
-                // console.log(row);
-                results.push(row);
-
-                client
-                  .end()
-                  .then(() => {
-                    return res.json(results);
-                  })
-                  .catch(err => {
-                    console.log("Err: ", err);
-                  });
-              });
-            })
-            .catch(err => {
-              console.log(err);
-              return res.json({ success: false, data: err });
-            });
+          return res.send({success: true, msg: 'Todo Added Successfully'});
         })
         .catch(err => {
-          console.log(err);
           return res.json({ success: false, data: err });
         });
     });
@@ -56,54 +33,40 @@ export class TodoController {
 
   public getTodos(req: Request, res: Response) {
     const results = [];
-    var client = new Client(connectionString);
-    client
-      .connect()
-      .then(() => {
-        client
-          .query("SELECT * FROM todoList ORDER BY id asc")
+    const client = new Client(connectionString);
+    client.connect(error => {
+        if (error) {
+          return res.status(500).json({ success: false, error: error });
+        }
+        client.query("SELECT * FROM todoList ORDER BY id asc")
           .then(result2 => {
             result2.rows.forEach(row => {
-              // console.log(row);
               results.push(row);
-
-              client
-                .end()
-                .then(() => {
-                  return res.status(200).json(results);
-                })
-                .catch(err => {
-                  //console.log("Err: ", err);
-                });
             });
+            return res.status(200).json(results);
           })
           .catch(err => {
-            console.log(err);
             return res.json({ success: false, data: err });
           });
+
       })
-      .catch(err => {
-        console.log(err);
-        return res.status(500).json({ success: false, data: err });
-      });
   }
 
   public getTodoWithID(req: Request, res: Response) {
     const id = req.params.id;
     var client = new Client(connectionString);
-    client
-      .connect()
-      .then(() => {
-        client.query('SELECT * FROM todoList where id=($1)', [id]).then((result) => {
-        res.status(200).json(result.rows);  
-        }).catch((err) => {
-          console.log(err);
-        return res.status(500).json({ success: false, data: err });  
-        })
-      }).catch(err => {
-        console.log(err);
-        return res.status(500).json({ success: false, data: err });
-      });
+    client.connect((error) => {
+
+      if (error) {
+        return res.status(500).json({ success: false, error: error });
+      }
+
+      client.query('SELECT * FROM todoList where id=($1)', [id]).then((result) => {
+      return res.status(200).json(result.rows);  
+      }).catch((err) => {
+      return res.status(500).json({ success: false, data: err });  
+      })
+    });
   }
 
   public updateTodo(req: Request, res: Response) {
@@ -115,84 +78,32 @@ export class TodoController {
       todoDescription,
       complete
     };
-    var client = new Client(connectionString);
-    client
-      .connect()
-      .then(() => {
-        client.query(
-          "UPDATE todoList SET todoTitle=($1), todoDescription=($2), complete=($3) where id=($4)",
-          [data.todoTitle, data.todoDescription, data.complete, id]
-        );
-      })
-      .then(resultUpdate => {
-        client
-          .query("SELECT * FROM todoList ORDER BY id asc")
-          .then(result2 => {
-            result2.rows.forEach(row => {
-              // console.log(row);
-              results.push(row);
-
-              client
-                .end()
-                .then(() => {
-                  return res.json(results);
-                })
-                .catch(err => {
-                  console.log("Err: ", err);
-                });
-            });
-          })
-          .catch(err => {
-            console.log(err);
-            return res.json({ success: false, data: err });
-          });
-      })
-      .catch(err => {
-        console.log("Update err: ", err.message);
-      })
-      .catch(err => {
-        console.log(err);
+    console.log(data);
+    const client = new Client(connectionString);
+    client.connect(() => {
+      client.query(
+        "UPDATE todoList SET todoTitle=($1), todoDescription=($2), complete=($3) where id=($4)",
+        [data.todoTitle, data.todoDescription, data.complete, id]
+      ).then(err => {
+        return res.status(200).json({ success: true, msg: "UPDATED!" });
+      }).catch(err => {
         return res.status(500).json({ success: false, data: err });
       });
+    })
   }
 
   public deleteTodo(req: Request, res: Response) {
     const results = [];
     const id = req.params.id;
     var client = new Client(connectionString);
-    console.log("HIT DELETE");
-    client
-      .connect()
-      .then(() => {
-        client
-          .query("DELETE FROM todoList WHERE id=($1)", [id])
-          .then(deleteTodo => {
-            client
-              .query("SELECT * FROM todoList ORDER BY id asc")
-              .then(result2 => {
-                result2.rows.forEach(row => {
-                  // console.log(row);
-                  results.push(row);
-
-                  client
-                    .end()
-                    .then(() => {
-                      return res.json(results);
-                    })
-                    .catch(err => {
-                      console.log("Err: ", err);
-                    });
-                });
-              });
-          })
-          .catch(err => {
-            console.log(err);
-            return res.status(500).json({ success: false, data: err });
-          });
+    client.connect(() => {
+        client.query("DELETE FROM todoList WHERE id=($1)", [id])
+        .then(err => {
+          return res.status(200).json({ success: true, msg: "DELETED!" });
+        })
+        .catch(err => {
+          return res.status(500).json({ success: false, data: err });
+        });
       })
-      .catch(err => {
-        console.log(err);
-        return res.status(500).json({ success: false, data: err });
-      });
   }
 }
