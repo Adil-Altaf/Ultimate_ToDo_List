@@ -4,11 +4,6 @@ import { Dimensions, Modal, View, KeyboardAvoidingView } from "react-native";
 import { fetchTodos, postTodo } from "../store/actions/index";
 import { connect } from "react-redux";
 import {
-  FormLabel,
-  FormInput,
-  FormValidationMessage
-} from "react-native-elements";
-import {
   Icon,
   Header,
   Left,

@@ -7,9 +7,11 @@ export const fetchTodos = () => {
     try {
       await db
         .collection("todos")
+        .orderBy("timestamp", "desc")
         .get()
         .then(querySnapshot => {
           // console.log('Data: ', querySnapshot);
+
           querySnapshot.forEach(doc => {
             // console.log(`${doc.id} => ${doc.data()}`);
             arr.push({
@@ -32,18 +34,38 @@ export const fetchTodos = () => {
   };
 };
 
-export const deleteTodo = todoId => {
+export const updateTodo = (todoId, title, description) => {
   return async dispatch => {
     await db
       .collection("todos")
-      .doc(todoId)
-      .delete()
-      .then(function() {
-        console.log("Document successfully deleted!");
-      })
-      .catch(function(error) {
-        console.error("Error removing document: ", error);
+      .where("uid", "==", todoId)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          console.log(doc.id, " => ", doc.data());
+          // Build doc ref from doc.id
+          db.collection("todos")
+            .doc(doc.id)
+            .update({
+              title,
+              description
+            });
+        });
       });
+  };
+};
+
+export const deleteTodo = todoId => {
+  return async dispatch => {
+    try {
+      await db
+        .collection("todos")
+        .doc(todoId)
+        .delete();
+      console.log("Document deleted");
+    } catch (err) {
+      console.error("Error removing document: ", error);
+    }
   };
 };
 
@@ -55,16 +77,18 @@ export const postTodo = (title, description) => {
     title,
     description,
     date: dateStr,
-    done: false
+    done: false,
+    timestamp: Date.now()
   };
-  return dispatch =>
-    db
-      .collection("todos")
-      .add(todo)
-      .then(docRef => {
-        console.log("Document written with ID: ", docRef.id);
-      })
-      .catch(error => {
-        console.error("Error adding document: ", error);
-      });
-};
+  return async dispatch => {
+    try {
+      const docRef = await db
+        .collection("todos")
+        .add(todo)
+      console.log("Document written with ID: ", docRef.id);
+    }
+    catch (err) {
+      console.error("Error adding document: ", err);
+    }
+  }
+}
