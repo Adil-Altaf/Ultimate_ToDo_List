@@ -1,4 +1,5 @@
 var idCounter = 0;
+var fetchFromAPI = "https://api.github.com/users/zeeshanhanif/followers"; //REST API link will come here
 
 if ('serviceWorker' in navigator) {
     console.log("service worker found");
@@ -10,7 +11,6 @@ if ('serviceWorker' in navigator) {
         .catch(function (err) {
             console.log("ERROR of sw registration: " + err);
         });
-
 }
 
 function clearFields() {
@@ -19,7 +19,7 @@ function clearFields() {
     document.getElementById("txtTitle").focus();
 }
 
-function addTask(id, title, desc, status, addToAPIFlag) {  // function to add task
+function addTask(id, title, desc, status, addToAPIFlag, addToIndexDB = true) {  // function to add task
     var img;
     var varOnClick;
     if (status) {
@@ -37,18 +37,26 @@ function addTask(id, title, desc, status, addToAPIFlag) {  // function to add ta
 
     document.getElementById('tasksTableBody').innerHTML += htmlText;
 
+
     idCounter = id;
     clearFields();
 
+
+    if (addToIndexDB) {
+        addRecord(idCounter, title, desc);          // add records to indexDB
+    }
     if (addToAPIFlag) {
-        addRecordToServer(idCounter, title, desc);
+        addRecordToServer(idCounter, title, desc);  // add records to Server (API)
     }
 }
 
 function task_done(row_id) {
     document.getElementById(row_id).setAttribute("src", "images/done.png");
     document.getElementById(row_id).setAttribute("onclick", "");
-    updateTaskStatusToServer(Number(row_id.slice(8, row_id.length)));
+
+
+    updateTaskStatus(Number(row_id.slice(8, row_id.length)));  // update task status at indexDB
+    updateTaskStatusToServer(Number(row_id.slice(8, row_id.length)));// update task status at server with API
 }
 
 function delete_task(taskid) {  // this funciton is to delete to do task from list
@@ -65,7 +73,9 @@ function delete_task(taskid) {  // this funciton is to delete to do task from li
         }
     }
 
-    removeRecordFromServer(Number(taskid.slice(9, taskid.length)));
+    removeRecord(Number(taskid.slice(9, taskid.length))); // remove record from indexDB
+
+    removeRecordFromServer(Number(taskid.slice(9, taskid.length))); // remove record from Server (API)
 }
 
 function validateTaskInput() {
@@ -89,7 +99,6 @@ function validateTaskInput() {
     if (allOkFlag) {
         addTask(++idCounter, varTaskTitle.value.trim(), varTaskDesc.value.trim(), false, true);
     }
-
 }
 
 function changeCase(txt) { // function to change case of first letter of every word
@@ -112,16 +121,17 @@ function changeCase(txt) { // function to change case of first letter of every w
 
 function getData() {
     // fetching data from Server
-    var fetchFromAPI = "https://api.github.com/users/zeeshanhanif/following"; //REST API link will come here
-
     var networkUpdate = fetch(fetchFromAPI).then(function (response) {
         // return data in json form
+        clearIndexDB_Data();
         return response.json();
     }).then(function (data) {
         // if data (json) received it will update user screen
         updatePage(data);
+    }).catch((e) => {
+        getAll();
+        console.log("no internet/cache!", e);
     });
-
 }
 
 function updatePage(data) {
@@ -130,7 +140,9 @@ function updatePage(data) {
 
 
         // field value to be adjusted according to JSON
-        addTask(i + " ---" + data[i].id, data[i].login, data[i].login, false, false);
+        addTask(data[i].id, data[i].login, data[i].login, false);
+
+
     }
 }
 

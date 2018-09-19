@@ -1,8 +1,19 @@
+importScripts("idb.js");
+importScripts("jscript.js");
+
+//var fetchFromAPI = "https://api.github.com/users/zeeshanhanif/followers"; //REST API link will come here
+
+
 var cacheName = "ultimate-toDo-pwa_1";
 
 var filesToCache = [
     '/index.html',
     '/jscript.js',
+    '/idbindexdb.js',
+    '/idb.js',
+    '/sw.js',
+    '/manifest.js',
+    '/manifest.json',
     '/style.css',
     '/images/banner.jpg',
     '/images/done.png',
@@ -42,12 +53,22 @@ self.addEventListener('activate', function (e) {
 
 
 
-self.addEventListener('fetch', function (e) {
-    e.respondWith(
-        fetch(e.request).catch(function () {  // Look at network first 
-            // if unsuccessful in retreiving from network then look fro cache
-            return caches.match(e.request);
-        })
-    );
+self.addEventListener('fetch', function (event) {
+    if (event.request.url.indexOf(fetchFromAPI) < 0) {
+        console.log("fetch static Pages");
+        event.respondWith(
+            caches.match(event.request).then(function (response) {
+                return response || fetch(event.request);
+            })
+        );
+    } else {
+        event.respondWith(
+            fetch(event.request).catch(function () {// Look at network first 
+                // if unsuccessful in retreiving from network then look fro cache
+                console.log("from indexdb");
+                return "no_internet"; // caches.match(event.request);
+            })
+        );
+    }
 });
 
