@@ -29,7 +29,7 @@ class Task extends Component{
         </div>
         </Grid>
         <Grid style = {styles.rightSide} xs = {9} >
-        {this.state.taskComponent ?  <TaskList/> :<InputField/>  }
+        {this.state.taskComponent ?  <TaskList/> :<InputField taskComponentChange = {this.taskComponentChange} />  }
         </Grid>
       </Grid>
     )
@@ -70,7 +70,7 @@ const styles ={
     textAlign : 'center',
     color : 'white',
     width : '100%',
-    backgroundColor : '#484464',
+    backgroundColor : '#484464' ,
     height : 40,
     padding : 10
   }

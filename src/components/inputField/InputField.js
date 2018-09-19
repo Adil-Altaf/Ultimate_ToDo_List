@@ -2,11 +2,20 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import {addTask} from '../../store/actions/todoActions';
 import { withStyles } from "@material-ui/core/styles";
-import {Paper , TextField } from '@material-ui/core';
+import {Paper , TextField , Button} from '@material-ui/core';
+import {MuiThemeProvider } from "@material-ui/core/styles";
+import theme from '../MuiCustomColor/MuiCustom';
 
 
 const styles = theme =>
   console.log(theme) || {
+    mainStyles :{
+        height : '100vh',
+        display: 'flex',
+        flexDirection : 'column',
+        justifyContent : 'center',
+        alignItems: 'center'
+    },
     root: {
       padding: 50,
       width: '65%',
@@ -15,9 +24,17 @@ const styles = theme =>
     textField : {
         width : '500px',
     },
-    textarea : {
-        width : '500px',
-        overflow : 'hidden'
+    buttonContainer : {
+        height : '180px',
+        width : '100%',
+        display : 'flex',
+        flexDirection : 'row',
+        justifyContent : 'flex-end',
+        alignItems: 'flex-end'
+    },
+    button : {
+        backgroundColor : '#10C1C1',
+        margin : 5
     }
   };
 class InputField extends Component {
@@ -54,22 +71,23 @@ class InputField extends Component {
   render() {
       const {classes} = this.props;
     return (
-        <div style = {mainStyles} >
+        <MuiThemeProvider theme = {theme}>
+        <div className = {classes.mainStyles} >
         <Paper className = {classes.root} >
         <form onSubmit = {this.sendTask} >
         <TextField
         name = "title" 
+        label = 'Title'
         value = {this.state.title}                
         onChange = {this.onChangeText}
         id="standard-with-placeholder"
-        label="Title"
         placeholder="Enter your task title"
         className={classes.textField}
         margin="normal"
       />
 
        <TextField
-        name = 'desc'
+       name = 'desc'
        value = {this.state.desc}
        onChange = {this.onChangeText}
        id="standard-multiline-flexible"
@@ -77,25 +95,26 @@ class InputField extends Component {
        placeholder = "Enter your Description"
        multiline
        rowsMax="4"
-        className={classes.textarea}
-        margin="normal"
+       className={classes.textField}
+       margin="normal"
       />
-        <input 
-        type = "submit"
-        value = "add"
-        />
-        </form>
+    
+    <div className = {classes.buttonContainer} >
+      <Button onClick = {() => this.props.taskComponentChange(true)} variant="contained" size = 'large' color="primary" className = {classes.button}>
+        Cancle
+      </Button>
+      <Button type = 'submit' variant="contained" size = 'large' color="primary" className = {classes.button}>
+        ADD
+      </Button>
+      </div> 
+       
+      </form>
       </Paper>
       </div>
+      </MuiThemeProvider>
     )
   }
 };
 
-const mainStyles = {
-    height : '100vh',
-    display: 'flex',
-    flexDirection : 'column',
-    justifyContent : 'center',
-    alignItems: 'center'
-}
+
 export default    withStyles(styles)(connect(null , {addTask})(InputField));
