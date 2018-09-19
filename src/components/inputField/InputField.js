@@ -1,7 +1,25 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux';
 import {addTask} from '../../store/actions/todoActions';
+import { withStyles } from "@material-ui/core/styles";
+import {Paper , TextField } from '@material-ui/core';
 
+
+const styles = theme =>
+  console.log(theme) || {
+    root: {
+      padding: 50,
+      width: '65%',
+      height : 400
+    },
+    textField : {
+        width : '500px',
+    },
+    textarea : {
+        width : '500px',
+        overflow : 'hidden'
+    }
+  };
 class InputField extends Component {
     constructor(props){
         super(props)
@@ -34,29 +52,50 @@ class InputField extends Component {
         })
     }
   render() {
+      const {classes} = this.props;
     return (
-      <div>
+        <div style = {mainStyles} >
+        <Paper className = {classes.root} >
         <form onSubmit = {this.sendTask} >
-        <input type = 'text' 
+        <TextField
         name = "title" 
-        value = {this.state.title}
+        value = {this.state.title}                
         onChange = {this.onChangeText}
-        />
-        <textarea 
+        id="standard-with-placeholder"
+        label="Title"
+        placeholder="Enter your task title"
+        className={classes.textField}
+        margin="normal"
+      />
+
+       <TextField
         name = 'desc'
-        value = {this.state.desc}
-        onChange = {this.onChangeText}
-        >
-            Enter your Description
-        </textarea>
+       value = {this.state.desc}
+       onChange = {this.onChangeText}
+       id="standard-multiline-flexible"
+       label="Description"
+       placeholder = "Enter your Description"
+       multiline
+       rowsMax="4"
+        className={classes.textarea}
+        margin="normal"
+      />
         <input 
         type = "submit"
         value = "add"
         />
         </form>
+      </Paper>
       </div>
     )
   }
 };
 
-export default connect(null , {addTask})(InputField);
+const mainStyles = {
+    height : '100vh',
+    display: 'flex',
+    flexDirection : 'column',
+    justifyContent : 'center',
+    alignItems: 'center'
+}
+export default    withStyles(styles)(connect(null , {addTask})(InputField));
