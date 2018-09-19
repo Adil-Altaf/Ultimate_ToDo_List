@@ -12,7 +12,7 @@ message GetRequestAllTask {
 }
 
 message ResponseAllTask {
-    repeated Todo todo = 1;
+    Todo todo = 1;
 }
 
 
