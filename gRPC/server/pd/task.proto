@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+message Task{
+    int32 id = 1;
+    string title = 'Title';
+    string Descrption = 'Description';
+    bool completed = false;
+}
+
+message GetRequestAllTask {
+
+}
+
+message ResponseAllTask {
+    repeated Todo todo = 1;
+}
+
+
+message GetTodoById {
+    int32 id = 1;
+}
+
+message TodoRequest{
+    Todo todo = 1;
+}
+
+message AddTodo {
+    Todo todo = 1
+}
+
+
+
+message AddTodoResponse {
+    bool done = 1;
+}
+
+services TodoService {
+    rpc getAllTasks {GetRequestAllTask} returns {stream ResponseAllTask};
+    rpc getTaskById {GetRequestTaskById} returns {ResponseTaskById};
+    rpc saveTask {TodoRequest} returns {TodoResponse};
+    rpc deleteTask {GetByTodoId} retruns {TodoResponse};
+}
