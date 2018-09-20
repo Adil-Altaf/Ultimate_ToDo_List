@@ -1,4 +1,4 @@
-import { FETCH_TODOS } from "./types";
+import { FETCH_TODOS, DELETE_TODO, ADD_TODO, DONE_TODO } from "./types";
 import { db } from "../config/firebaseconfig";
 
 export const fetchTodos = () => {
@@ -55,6 +55,21 @@ export const updateTodo = (todoId, title, description) => {
   };
 };
 
+export const doneTodo = (todoId, todoDone) => {
+  return async dispatch => {
+    try {
+      await db.collection("todos").doc(todoId).update({ done: !todoDone })
+      dispatch({
+        type: DONE_TODO,
+        payload: todoId
+      })
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+}
+
 export const deleteTodo = todoId => {
   return async dispatch => {
     try {
@@ -62,6 +77,10 @@ export const deleteTodo = todoId => {
         .collection("todos")
         .doc(todoId)
         .delete();
+        dispatch({
+          type: DELETE_TODO,
+          payload: todoId
+        })
       console.log("Document deleted");
     } catch (err) {
       console.error("Error removing document: ", error);
@@ -86,6 +105,10 @@ export const postTodo = (title, description) => {
         .collection("todos")
         .add(todo)
       console.log("Document written with ID: ", docRef.id);
+      // dispatch({
+      //   type: ADD_TODO,
+      //   payload: 
+      // })
     }
     catch (err) {
       console.error("Error adding document: ", err);
