@@ -9,9 +9,11 @@ class WelcomeScreen extends Component {
     header: null
   };
 
+
+  
   render() {
     return (
-      <LinearGradient
+      <LinearGradient 
         colors={["rgb(16, 193, 193)", "rgb(72, 68, 100)"]}
         style={styles.slideStyle}
       >
@@ -62,7 +64,7 @@ const styles = {
     color: "#ffffff"
   },
   buttonStyle: {
-    borderRadius: 9,
+    borderRadius: 8,
     backgroundColor: "#ffffff",
     shadowColor: "#484464",
     shadowOffset: {

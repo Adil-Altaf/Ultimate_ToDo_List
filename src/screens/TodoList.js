@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import { Dimensions, Modal, View, KeyboardAvoidingView, TouchableOpacity } from "react-native";
-import { fetchTodos, postTodo } from "../store/actions/index";
+import { Dimensions, Modal, View, ListView } from "react-native";
+import { fetchTodos, postTodo, deleteTodo, doneTodo } from "../store/actions/index";
 import { connect } from "react-redux";
 import {
   FormLabel,
@@ -26,7 +26,9 @@ import {
   Item,
   Input,
   Label,
-  Textarea
+  Textarea,
+  ListItem,
+  SwipeRow
 } from "native-base";
 import { LinearGradient } from "expo";
 
@@ -40,8 +42,10 @@ class TodoListScreen extends Component {
       title: "",
       description: "",
       listVisible: true,
-      error: ""
+      error: "",
+      isSwiping: false
     };
+    this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     const date = new Date();
     const monthArr = [
@@ -67,43 +71,48 @@ class TodoListScreen extends Component {
   }
 
   componentDidMount() {
-    //setInterval(()=>{
-     this.props.fetchTodos();
-    //},1000)
+    this.props.fetchTodos();
   }
 
-  // componentDidUpdate(nextProps) {
-  //   this.props.fetchTodos();
-  // }
+  handleDeleteTodo(todoId) {
+    try {
+      this.props.deleteTodo(todoId);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  handleCheckTodo(todoId, todoDone) {
+    this.props.doneTodo(todoId, todoDone)
+  }
+
 
   static navigationOptions = {
-    // title: "ULTIMATE TODO APP",
-    // headerRight: (
-    //   <Icon name="plus" type="MaterialCommunityIcons" style={{paddingLeft: 10}} />
-    // ),
-    // headerTitleStyle: {
-    //    width: Dimensions.get("window").width,
-    //    }
     header: null
   };
 
   submitTodo() {
     if (this.state.title !== "" && this.state.description) {
-      this.props.postTodo(this.state.title, this.state.description)
+      this.props.postTodo(this.state.title, this.state.description);
       // this.setState({ Spinner })
       this.props.fetchTodos();
-      this.setState({modalVisible: false, title: "", description: "", listVisible: true })
-
-    } else if(this.state.title === ""){
-      this.setState({error: "Title is empty!"})
-    } else if(this.state.description === ""){
-      this.setState({error: "Description is empty!"})
+      this.setState({
+        modalVisible: false,
+        title: "",
+        description: "",
+        listVisible: true
+      });
+    } else if (this.state.title === "") {
+      this.setState({ error: "Title is empty!" });
+    } else if (this.state.description === "") {
+      this.setState({ error: "Description is empty!" });
     }
-      
-    
   }
 
   render() {
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    });
     return (
       <LinearGradient
         style={styles.slideStyle}
@@ -127,7 +136,9 @@ class TodoListScreen extends Component {
           <Right>
             <Button
               transparent
-              onPress={() => this.setState({ modalVisible: true, listVisible: false })}
+              onPress={() =>
+                this.setState({ modalVisible: true, listVisible: false })
+              }
             >
               <Icon
                 name="plus"
@@ -138,35 +149,38 @@ class TodoListScreen extends Component {
           </Right>
         </Header>
         <Text style={styles.dateText}>{this.dateStr}</Text>
-        <Content style={{ marginTop: 30 }}>
+        <Content style={{ marginTop: 20 }}>
           {this.props.todos === null ? (
             <Spinner color="white" />
-          ) : (
-            this.state.listVisible ? <List
-            dataArray={this.props.todos}
-            renderRow={todo => (
-              <TouchableOpacity onPress={() => this.props.updateTodo(todoId)}>
-              <Card style={styles.todo}>
-                <CardItem header>
-                  <Text>{todo.title}</Text>
-                </CardItem>
-                <CardItem>
-                  <Body style={{ flexDirection: "row" }}>
-                    <Text style={{ flex: 1 }}>{todo.description}</Text>
-                    <Button transparent style={{ marginRight: -20 }}>
-                      <Icon
-                        name="check-circle-outline"
-                        type="MaterialCommunityIcons"
-                        style={{ color: "#10c1c1" }}
-                      />
-                    </Button>
-                  </Body>
-                </CardItem>
-              </Card>
-              </TouchableOpacity>
-            )}
-          /> : null
-          )}
+          ) : this.state.listVisible ? (
+            <List
+              leftOpenValue={75}
+              rightOpenValue={-75}
+              dataSource={this.ds.cloneWithRows(this.props.todos)}
+              renderRow={todo => (
+                  <ListItem thumbnail style={{backgroundColor: todo.done ? '#e5dbdb' : 'white'}}>
+                    <Body>
+                      <Text>{todo.title}</Text>
+                      <Text note numberOfLines={1}>{todo.description}</Text>
+                    </Body>
+                  </ListItem>
+              )}
+              renderLeftHiddenRow={todo => (
+                <Button
+                  full
+                  onPress={() => this.handleDeleteTodo(todo.id)}
+                  danger
+                >
+                  <Icon active name="delete" type="MaterialCommunityIcons" />
+                </Button>
+              )}
+              renderRightHiddenRow={todo => (
+                <Button full success onPress={() => this.handleCheckTodo(todo.id, todo.done)}>
+                  <Icon active name="check" type="MaterialCommunityIcons" />
+                </Button>
+              )}
+            />
+          ) : null}
           <Modal
             transparent={true}
             animationType="slide"
@@ -189,13 +203,18 @@ class TodoListScreen extends Component {
               >
                 <Card>
                   <CardItem header>
-                  <Left>
-                    <Text>Add New Task</Text>
-                  </Left>
-                  <Right>
+                    <Left>
+                      <Text>Add New Task</Text>
+                    </Left>
+                    <Right>
                       <Button
                         transparent
-                        onPress={() => this.setState({ modalVisible: false, listVisible: true })}
+                        onPress={() =>
+                          this.setState({
+                            modalVisible: false,
+                            listVisible: true
+                          })
+                        }
                       >
                         <Icon
                           name="close"
@@ -203,7 +222,7 @@ class TodoListScreen extends Component {
                           style={{ color: "#10c1c1", paddingLeft: 10 }}
                         />
                       </Button>
-                  </Right>
+                    </Right>
                   </CardItem>
                   <CardItem>
                     <Form>
@@ -230,10 +249,12 @@ class TodoListScreen extends Component {
                   </CardItem>
                   <Text style={{ color: "red" }}>{this.state.error}</Text>
                   <CardItem footer>
-                  <Left />
+                    <Left />
                     <Right>
-                      <Button style={styles.btnStyle} onPress={() => this.submitTodo()
-                      }>
+                      <Button
+                        style={styles.btnStyle}
+                        onPress={() => this.submitTodo()}
+                      >
                         <Text>Create</Text>
                       </Button>
                     </Right>
@@ -254,19 +275,15 @@ const styles = {
     width: SCREEN_WIDTH
   },
   todo: {
-    borderRadius: 8,
-    marginLeft: 16,
-    marginRight: 16,
-    marginTop: 10
+    backgroundColor: 'rgb(72, 68, 100)'
   },
   inputStyle: {
     width: 250,
     marginLeft: 7
   },
-  btnStyle:  {
+  btnStyle: {
     borderRadius: 5,
     backgroundColor: "#10c1c1"
-  
   },
   titleHeader: {
     width: SCREEN_WIDTH - 50,
@@ -301,5 +318,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchTodos, postTodo }
+  { fetchTodos, postTodo, deleteTodo, doneTodo }
 )(TodoListScreen);
