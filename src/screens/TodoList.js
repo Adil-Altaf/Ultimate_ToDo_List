@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 
 import { Dimensions, Modal, View, ListView } from "react-native";
-import { fetchTodos, postTodo, deleteTodo, doneTodo } from "../store/actions/index";
+import {
+  fetchTodos,
+  postTodo,
+  deleteTodo,
+  doneTodo,
+  updateTodo
+} from "../store/actions/index";
 import { connect } from "react-redux";
 import {
   FormLabel,
@@ -27,8 +33,7 @@ import {
   Input,
   Label,
   Textarea,
-  ListItem,
-  SwipeRow
+  ListItem
 } from "native-base";
 import { LinearGradient } from "expo";
 
@@ -43,7 +48,8 @@ class TodoListScreen extends Component {
       description: "",
       listVisible: true,
       error: "",
-      isSwiping: false
+      isUpdate: false,
+      todoId: null
     };
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -83,9 +89,20 @@ class TodoListScreen extends Component {
   }
 
   handleCheckTodo(todoId, todoDone) {
-    this.props.doneTodo(todoId, todoDone)
+    this.props.doneTodo(todoId, todoDone);
   }
 
+  handleUpdateTodo() {
+    const { todoId, title, description } = this.state;
+    this.props.updateTodo(todoId, title, description);
+    this.setState({
+      modalVisible: false,
+      title: "",
+      description: "",
+      listVisible: true,
+      isUpdate: false
+    });
+  }
 
   static navigationOptions = {
     header: null
@@ -158,12 +175,27 @@ class TodoListScreen extends Component {
               rightOpenValue={-75}
               dataSource={this.ds.cloneWithRows(this.props.todos)}
               renderRow={todo => (
-                  <ListItem thumbnail style={{backgroundColor: todo.done ? '#e5dbdb' : 'white'}}>
-                    <Body>
-                      <Text>{todo.title}</Text>
-                      <Text note numberOfLines={1}>{todo.description}</Text>
-                    </Body>
-                  </ListItem>
+                <ListItem
+                  onLongPress={() =>
+                    this.setState({
+                      title: todo.title,
+                      description: todo.description,
+                      modalVisible: true,
+                      todoId: todo.id,
+                      listVisible: false,
+                      isUpdate: true
+                    })
+                  }
+                  thumbnail
+                  style={{ backgroundColor: todo.done ? "#e5dbdb" : "white" }}
+                >
+                  <Body>
+                    <Text>{todo.title}</Text>
+                    <Text note numberOfLines={1}>
+                      {todo.description}
+                    </Text>
+                  </Body>
+                </ListItem>
               )}
               renderLeftHiddenRow={todo => (
                 <Button
@@ -175,8 +207,16 @@ class TodoListScreen extends Component {
                 </Button>
               )}
               renderRightHiddenRow={todo => (
-                <Button full success onPress={() => this.handleCheckTodo(todo.id, todo.done)}>
-                  <Icon active name={todo.done ? 'close' : 'check'} type="MaterialCommunityIcons" />
+                <Button
+                  full
+                  success
+                  onPress={() => this.handleCheckTodo(todo.id, todo.done)}
+                >
+                  <Icon
+                    active
+                    name={todo.done ? "close" : "check"}
+                    type="MaterialCommunityIcons"
+                  />
                 </Button>
               )}
             />
@@ -212,7 +252,9 @@ class TodoListScreen extends Component {
                         onPress={() =>
                           this.setState({
                             modalVisible: false,
-                            listVisible: true
+                            listVisible: true,
+                            title: "",
+                            description: ""
                           })
                         }
                       >
@@ -253,9 +295,13 @@ class TodoListScreen extends Component {
                     <Right>
                       <Button
                         style={styles.btnStyle}
-                        onPress={() => this.submitTodo()}
+                        onPress={
+                          this.state.isUpdate
+                            ? () => this.handleUpdateTodo()
+                            : () => this.submitTodo()
+                        }
                       >
-                        <Text>Create</Text>
+                        <Text>{this.state.isUpdate ? "Update" : "Create"}</Text>
                       </Button>
                     </Right>
                   </CardItem>
@@ -275,7 +321,7 @@ const styles = {
     width: SCREEN_WIDTH
   },
   todo: {
-    backgroundColor: 'rgb(72, 68, 100)'
+    backgroundColor: "rgb(72, 68, 100)"
   },
   inputStyle: {
     width: 250,
@@ -318,5 +364,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchTodos, postTodo, deleteTodo, doneTodo }
+  { fetchTodos, postTodo, deleteTodo, doneTodo, updateTodo }
 )(TodoListScreen);

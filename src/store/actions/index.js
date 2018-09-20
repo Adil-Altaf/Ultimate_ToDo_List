@@ -1,4 +1,4 @@
-import { FETCH_TODOS, DELETE_TODO, ADD_TODO, DONE_TODO } from "./types";
+import { FETCH_TODOS, DELETE_TODO, ADD_TODO, DONE_TODO, UPDATE_TODO } from "./types";
 import { db } from "../config/firebaseconfig";
 
 export const fetchTodos = () => {
@@ -22,7 +22,7 @@ export const fetchTodos = () => {
               done: doc.data().done
             });
           });
-          console.log("Todos arr: ", arr);
+          // console.log("Todos arr: ", arr);
           dispatch({
             type: FETCH_TODOS,
             payload: arr
@@ -36,24 +36,22 @@ export const fetchTodos = () => {
 
 export const updateTodo = (todoId, title, description) => {
   return async dispatch => {
-    await db
-      .collection("todos")
-      .where("uid", "==", todoId)
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          console.log(doc.id, " => ", doc.data());
-          // Build doc ref from doc.id
-          db.collection("todos")
-            .doc(doc.id)
-            .update({
-              title,
-              description
-            });
-        });
-      });
-  };
-};
+    try {
+      await db.collection("todos").doc(todoId).update({ title, description })
+      dispatch({
+        type: UPDATE_TODO,
+        payload: {
+          id: todoId,
+          title: title,
+          description: description
+        }
+      })
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+}
 
 export const doneTodo = (todoId, todoDone) => {
   return async dispatch => {
@@ -105,10 +103,6 @@ export const postTodo = (title, description) => {
         .collection("todos")
         .add(todo)
       console.log("Document written with ID: ", docRef.id);
-      // dispatch({
-      //   type: ADD_TODO,
-      //   payload: 
-      // })
     }
     catch (err) {
       console.error("Error adding document: ", err);
