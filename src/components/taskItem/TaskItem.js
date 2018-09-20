@@ -23,24 +23,35 @@ const TaskItem = (props) => {
   const task = {
     title : props.task.title,
     description : props.task.description,
-    id : props.id
+    id : props.id,
+    done : props.task.done
   }
   return (
     <MuiThemeProvider theme = {theme} >
     <div className = {props.classes.mainContainer} >
       <Paper elevation = {10} className = {props.classes.root} >
-      <h5>{props.task.title}</h5>
-      <p>{props.task.description}</p>
+      <h5>{task.title}</h5>
+      <p>{task.description}</p>
       <div className = {props.classes.icons} >
-      <IconButton onClick = {() => props.deleteTask(props.id)} color = 'primary'  >
+      {!task.done ? (
+        <div>
+         <IconButton onClick = {() => props.deleteTask(props.id)} color = 'primary'  >
+         <Delete/>
+       </IconButton>
+       <IconButton onClick = { ()=> props.openDialog(task)} color = 'primary' >
+         <Edit/> 
+       </IconButton>
+       <IconButton color = 'primary' >
+         <Done/>
+       </IconButton> 
+       </div>
+      ) : (<div>
+        <span>Done</span> 
+        <IconButton onClick = {() => props.deleteTask(props.id)} color = 'primary'  >
         <Delete/>
       </IconButton>
-      <IconButton onClick = { ()=> props.openDialog(task)} color = 'primary' >
-        <Edit/>
-      </IconButton>
-      <IconButton color = 'primary' >
-        <Done/>
-      </IconButton>
+      </div>
+      )}
       </div>
       </Paper>
     </div>
@@ -50,12 +61,3 @@ const TaskItem = (props) => {
 
 export default withStyles(styles)(TaskItem);
 
-
-{/* // <p>{props.task.time}</p>
-// {props.task.done ? <span>done</span> : <span></span>}
-/
-// <button >edit</button>
-// <button>done</button>
-// <i class="material-icons">
-// create
-// </i> */}
