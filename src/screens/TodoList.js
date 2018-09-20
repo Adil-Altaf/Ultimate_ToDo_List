@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { Dimensions, Modal, View, ListView } from "react-native";
+// import swal from 'sweetalert';
 import {
   fetchTodos,
   postTodo,
@@ -33,7 +34,8 @@ import {
   Input,
   Label,
   Textarea,
-  ListItem
+  ListItem,
+  Toast
 } from "native-base";
 import { LinearGradient } from "expo";
 
@@ -126,10 +128,18 @@ class TodoListScreen extends Component {
     }
   }
 
+  formatDate(date) {
+    const d = new Date(date);
+    const dateStr =
+    d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+    console.log(dateStr);
+  }
+
   render() {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
+
     return (
       <LinearGradient
         style={styles.slideStyle}
@@ -190,6 +200,7 @@ class TodoListScreen extends Component {
                   style={{ backgroundColor: todo.done ? "#e5dbdb" : "white" }}
                 >
                   <Body>
+                    {this.formatDate(todo.timestamp)}
                     <Text>{todo.title}</Text>
                     <Text note numberOfLines={1}>
                       {todo.description}
@@ -201,7 +212,7 @@ class TodoListScreen extends Component {
                 <Button
                   full
                   onPress={() => this.handleDeleteTodo(todo.id)}
-                  danger
+                  style={{backgroundColor: 'red'}}
                 >
                   <Icon active name="delete" type="MaterialCommunityIcons" />
                 </Button>
@@ -209,7 +220,7 @@ class TodoListScreen extends Component {
               renderRightHiddenRow={todo => (
                 <Button
                   full
-                  success
+                  style={{backgroundColor: todo.done ? 'red' : 'green'}}
                   onPress={() => this.handleCheckTodo(todo.id, todo.done)}
                 >
                   <Icon
@@ -320,9 +331,6 @@ const styles = {
     flex: 1,
     width: SCREEN_WIDTH
   },
-  todo: {
-    backgroundColor: "rgb(72, 68, 100)"
-  },
   inputStyle: {
     width: 250,
     marginLeft: 7
@@ -358,7 +366,8 @@ const styles = {
 
 const mapStateToProps = state => {
   return {
-    todos: state.todos.todos
+    todos: state.todos.todos,
+    error: state.todos.error
   };
 };
 
