@@ -52,15 +52,10 @@ class InputField extends Component {
 
     sendTask = (e) =>{
         e.preventDefault()
-        const date = new Date()
-        const hour = date.getHours();
-        const min = date.getMinutes();
-        const time = `${hour} : ${min}`
         const task = {
             title : this.state.title,
             description : this.state.desc,
             done : false,
-            time : time
         }
         this.props.addTask(task)
         this.setState({
@@ -90,9 +85,9 @@ class InputField extends Component {
        name = 'desc'
        value = {this.state.desc}
        onChange = {this.onChangeText}
-       id="standard-multiline-flexible"
        label="Description"
        placeholder = "Enter your Description"
+       id="standard-multiline-flexible"
        multiline
        rowsMax="4"
        className={classes.textField}

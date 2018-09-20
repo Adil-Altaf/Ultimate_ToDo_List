@@ -13,7 +13,6 @@ export const getTasks = () => dispatch =>{
                 id : doc.id,
                 title : doc.data().title,
                 description : doc.data().description,
-                time : doc.data().time,
                 done : doc.data().done
             })
         });
@@ -71,8 +70,7 @@ export const deleteTask =   (id) => dispatch =>{
 export const updateTask = (task) => dispatch =>{
     const updatedTask = {
         title : task.title,
-        descriptio : task.description,
-        time : task.time,
+        description : task.description,
         done : false
     }
     db.collection('tasks').doc(task.id).set(updatedTask)

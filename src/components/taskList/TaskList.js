@@ -74,7 +74,7 @@ const styles = {
     display : 'flex',
     flexDirection : 'column',
     alignItems: 'center',
-    padding : '40px'
+    padding : '60px'
   },
  
 }

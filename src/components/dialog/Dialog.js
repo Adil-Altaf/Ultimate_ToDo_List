@@ -1,16 +1,34 @@
 import React , {Component} from 'react';
 import 
-{Button , DialogTitle , TextField , Dialog , DialogActions , DialogContent , DialogContentText} 
+{Button , DialogTitle , TextField , Dialog , DialogActions , DialogContent } 
 from '@material-ui/core';
+import theme from '../MuiCustomColor/MuiCustom';
+import { withStyles , MuiThemeProvider } from "@material-ui/core/styles";
+
+const styles = theme =>
+  console.log(theme) || {
+    dialog : {
+      width : 500,
+      height : 400
+    },
+    actions : {
+      marginTop : '120px',
+      marginRight : '20px'
+    },
+    textField : {
+      width : '400px'
+    }
+  }
 
 
-export default class UpdateDialog extends Component {
+
+class UpdateDialog extends Component {
       constructor(props){
         super(props)
         this.state = {
           open : true,
-          title : props.task.title,
-          desc : props.task.description
+          title : this.props.task.title,
+          descrip : this.props.task.description
         }
       }
 
@@ -21,17 +39,26 @@ export default class UpdateDialog extends Component {
       }
 
       updateTask = ()=>{
-        console.log(this.props.updateTask)
+        console.log(this.state.descrip)
+        const updateTask = {
+          title : this.state.title,
+          description : this.state.descrip,
+          id : this.props.task.id
+        }
+        this.props.updateTask(updateTask)
         this.props.closeDialog()
       }
   render() {
+    const {classes} = this.props
     return (
-      <div>
+      <MuiThemeProvider theme = {theme} >
+      <div className= {classes.root}  >
         <Dialog
           open= {this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
+        <div className= {classes.dialog} >
           <DialogTitle id="form-dialog-title">Update</DialogTitle>
           <DialogContent>
             <TextField
@@ -42,30 +69,35 @@ export default class UpdateDialog extends Component {
               autoFocus
               id="name"
               label="Title"
-              type="text"
-              fullWidth
+              className = {classes.textField}
             />
             <TextField
             onChange = {this.changeInputText}
-            name  = 'desc'
-            value = {this.state.desc}
-              margin="dense"
-              id="name"
-              label="Description"
-              type="text"
-              fullWidth
+            name  = 'descrip'
+            value = {this.state.descrip}
+            id="standard-multiline-flexible"
+            multiline
+            rowsMax="4"
+            margin="dense"
+            label="Description"
+            className = {classes.textField}
             />
           </DialogContent>
-          <DialogActions>
-            <Button onClick={this.props.closeDialog} color="primary">
+          <DialogActions className = {classes.actions} >
+            <Button  variant="contained" size = 'medium' onClick={this.props.closeDialog} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.updateTask} color="primary">
+            <Button variant="contained" size = 'medium' onClick={this.updateTask} color="primary">
               Update
             </Button>
           </DialogActions>
+          </div>
         </Dialog>
-      </div> 
+      </div>
+      </MuiThemeProvider>
     );
   }
 }
+
+
+export default withStyles(styles)(UpdateDialog);
