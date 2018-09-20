@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, Dimensions } from "react-native";
-import { Button } from "native-base";
+import { Text, Dimensions } from "react-native";
+import { Button, Icon } from "native-base";
 import { LinearGradient } from "expo";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -10,13 +10,18 @@ class WelcomeScreen extends Component {
   };
 
 
-  
+
   render() {
     return (
-      <LinearGradient 
+      <LinearGradient
         colors={["rgb(16, 193, 193)", "rgb(72, 68, 100)"]}
         style={styles.slideStyle}
       >
+        <Icon
+          name="alpha"
+          type="MaterialCommunityIcons"
+          style={{ color: "white", fontSize: 120 }}
+        />
         <Text style={styles.textStyle}>ULTIMATE TODO APP</Text>
         <Text style={styles.smallTextStyle}>created by team alpha</Text>
         <Button
