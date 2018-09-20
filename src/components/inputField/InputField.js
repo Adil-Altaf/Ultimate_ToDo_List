@@ -117,4 +117,4 @@ class InputField extends Component {
 };
 
 
-export default    withStyles(styles)(connect(null , {addTask})(InputField));
+export default withStyles(styles)(connect(null , {addTask})(InputField));

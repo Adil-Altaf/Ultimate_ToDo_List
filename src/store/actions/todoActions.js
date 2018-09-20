@@ -71,7 +71,7 @@ export const deleteTask =   (id) => dispatch =>{
 export const updateTask = (task) => dispatch =>{
     const updatedTask = {
         title : task.title,
-        description : task.description,
+        descriptio : task.description,
         time : task.time,
         done : false
     }

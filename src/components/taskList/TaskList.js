@@ -55,7 +55,7 @@ class TaskList extends Component {
     }
 
     return (
-      <div>
+      <div style = {styles.taskContainer} >
          {content}
          {this.state.dialog ?  <UpdateDialog updateTask = {this.props.updateTask} task = {this.state.task} closeDialog = {this.closeDialog} /> : <span></span> }
       </div>
@@ -66,5 +66,16 @@ const mapStateToProps = (state) =>{
   return {
     tasks  : state.TaskReducer.tasks
   }
+}
+
+const styles = {
+  taskContainer : {
+    width : '100%',
+    display : 'flex',
+    flexDirection : 'column',
+    alignItems: 'center',
+    padding : '40px'
+  },
+ 
 }
 export default connect(mapStateToProps , {getTasks , deleteTask , updateTask})(TaskList);
