@@ -176,7 +176,7 @@ class TodoListScreen extends Component {
               )}
               renderRightHiddenRow={todo => (
                 <Button full success onPress={() => this.handleCheckTodo(todo.id, todo.done)}>
-                  <Icon active name="check" type="MaterialCommunityIcons" />
+                  <Icon active name={todo.done ? 'close' : 'check'} type="MaterialCommunityIcons" />
                 </Button>
               )}
             />
