@@ -8,6 +8,7 @@ import TodoList from "./src/TodoList";
 const store = createStore(reducers, {}, applyMiddleware(thunk));
 
 export default class App extends React.Component {
+
   render() {
     return (
       <Provider store={store}>

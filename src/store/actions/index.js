@@ -117,6 +117,10 @@ export const postTodo = (title, description) => {
     try {
       const docRef = await db.collection("todos").add(todo);
       console.log("Document written with ID: ", docRef.id);
+      dispatch({
+        type: ADD_TODO,
+        todo
+      })
     } catch (err) {
       dispatch({
         type: ERROR,

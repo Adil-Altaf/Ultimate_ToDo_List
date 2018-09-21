@@ -3,8 +3,7 @@ import {
   Dimensions,
   Modal,
   View,
-  ListView,
-  KeyboardAvoidingView
+  ListView
 } from "react-native";
 import {
   fetchTodos,
@@ -192,9 +191,12 @@ class TodoListScreen extends Component {
           {todos === null ? (
             <Spinner color="white" />
           ) : todos.length === 0 ? (
-            <Text style={{ color: 'white', textAlign: "center" }}>You haven't any todo in List</Text>
+            <Text style={{ color: "white", textAlign: "center" }}>
+              You haven't any todo in List
+            </Text>
           ) : this.state.listVisible ? (
             <List
+              style={{ margin: 12, borderRadius: 5 }}
               leftOpenValue={75}
               rightOpenValue={-75}
               dataSource={this.ds.cloneWithRows(todos)}
@@ -211,12 +213,15 @@ class TodoListScreen extends Component {
                     })
                   }
                   thumbnail
-                  style={{ backgroundColor: todo.done ? "#e5dbdb" : "white", marginRight: 18 }}
+                  style={{
+                    backgroundColor: todo.done ? "#D3CCE3" : "#E9E4F0",
+                    paddingRight: 18
+                  }}
                 >
                   <Body>
                     {this.formatDate(todo.timestamp)}
                     <Text>{todo.title}</Text>
-                    <Text note numberOfLines={1}>
+                    <Text note>
                       {todo.description}
                     </Text>
                   </Body>
