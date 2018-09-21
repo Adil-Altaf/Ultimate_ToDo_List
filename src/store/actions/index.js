@@ -36,7 +36,7 @@ export const fetchTodos = () => {
           payload: 'Connection failed'
         });
       }
-      
+
     }
   };
 };

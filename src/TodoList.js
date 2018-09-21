@@ -5,9 +5,6 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import TodoListScreen from "./screens/TodoList";
 
 class TodoList extends Component {
-
-  
-
   render() {
     return (
       <Container>

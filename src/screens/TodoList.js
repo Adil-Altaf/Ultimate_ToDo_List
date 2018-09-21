@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-
-import { Dimensions, Modal, View, ListView } from "react-native";
-// import swal from 'sweetalert';
+import {
+  Dimensions,
+  Modal,
+  View,
+  ListView,
+  KeyboardAvoidingView
+} from "react-native";
 import {
   fetchTodos,
   postTodo,
@@ -10,11 +14,6 @@ import {
   updateTodo
 } from "../store/actions/index";
 import { connect } from "react-redux";
-import {
-  FormLabel,
-  FormInput,
-  FormValidationMessage
-} from "react-native-elements";
 import {
   Icon,
   Header,
@@ -34,14 +33,17 @@ import {
   Input,
   Label,
   Textarea,
-  ListItem,
-  Toast
+  ListItem
 } from "native-base";
 import { LinearGradient } from "expo";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 class TodoListScreen extends Component {
+  static navigationOptions = {
+    header: null
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -51,7 +53,8 @@ class TodoListScreen extends Component {
       listVisible: true,
       error: "",
       isUpdate: false,
-      todoId: null
+      todoId: null,
+      chosenDate: new Date()
     };
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -76,6 +79,7 @@ class TodoListScreen extends Component {
       date.getDate() +
       ", " +
       date.getFullYear();
+    this.setDate = this.setDate.bind(this);
   }
 
   componentDidMount() {
@@ -106,36 +110,44 @@ class TodoListScreen extends Component {
     });
   }
 
-  static navigationOptions = {
-    header: null
-  };
-
   submitTodo() {
-    if (this.state.title !== "" && this.state.description) {
-      this.props.postTodo(this.state.title, this.state.description);
+    if (this.state.title !== "" && this.state.description !== "") {
+      this.props.postTodo(
+        this.state.title,
+        this.state.description,
+        this.state.chosenDate
+      );
       // this.setState({ Spinner })
       this.props.fetchTodos();
       this.setState({
         modalVisible: false,
         title: "",
         description: "",
-        listVisible: true
+        listVisible: true,
+        chosenDate: new Date()
       });
+    } else if (this.state.title === "" && this.state.description === "") {
+      this.setState({ error: "Please enter all fields" });
     } else if (this.state.title === "") {
-      this.setState({ error: "Title is empty!" });
-    } else if (this.state.description === "") {
-      this.setState({ error: "Description is empty!" });
+      this.setState({ error: "Please enter title" });
+    } else {
+      this.setState({ error: "Please enter description" });
     }
   }
 
   formatDate(date) {
     const d = new Date(date);
-    const dateStr =
-    d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+    const dateStr = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
     console.log(dateStr);
   }
 
+  setDate(newDate) {
+    this.setState({ chosenDate: newDate });
+  }
+
   render() {
+    const { todos } = this.props;
+    // console.log("TOdos emty: ", todos);
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
@@ -177,13 +189,15 @@ class TodoListScreen extends Component {
         </Header>
         <Text style={styles.dateText}>{this.dateStr}</Text>
         <Content style={{ marginTop: 20 }}>
-          {this.props.todos === null ? (
+          {todos === null ? (
             <Spinner color="white" />
+          ) : todos.length === 0 ? (
+            <Text style={{ color: 'white', textAlign: "center" }}>You haven't any todo in List</Text>
           ) : this.state.listVisible ? (
             <List
               leftOpenValue={75}
               rightOpenValue={-75}
-              dataSource={this.ds.cloneWithRows(this.props.todos)}
+              dataSource={this.ds.cloneWithRows(todos)}
               renderRow={todo => (
                 <ListItem
                   onLongPress={() =>
@@ -197,7 +211,7 @@ class TodoListScreen extends Component {
                     })
                   }
                   thumbnail
-                  style={{ backgroundColor: todo.done ? "#e5dbdb" : "white" }}
+                  style={{ backgroundColor: todo.done ? "#e5dbdb" : "white", marginRight: 18 }}
                 >
                   <Body>
                     {this.formatDate(todo.timestamp)}
@@ -212,7 +226,7 @@ class TodoListScreen extends Component {
                 <Button
                   full
                   onPress={() => this.handleDeleteTodo(todo.id)}
-                  style={{backgroundColor: 'red'}}
+                  style={{ backgroundColor: "red" }}
                 >
                   <Icon active name="delete" type="MaterialCommunityIcons" />
                 </Button>
@@ -220,7 +234,7 @@ class TodoListScreen extends Component {
               renderRightHiddenRow={todo => (
                 <Button
                   full
-                  style={{backgroundColor: todo.done ? 'red' : 'green'}}
+                  style={{ backgroundColor: todo.done ? "red" : "green" }}
                   onPress={() => this.handleCheckTodo(todo.id, todo.done)}
                 >
                   <Icon
@@ -265,7 +279,8 @@ class TodoListScreen extends Component {
                             modalVisible: false,
                             listVisible: true,
                             title: "",
-                            description: ""
+                            description: "",
+                            error: ""
                           })
                         }
                       >
@@ -300,7 +315,7 @@ class TodoListScreen extends Component {
                       </Item>
                     </Form>
                   </CardItem>
-                  <Text style={{ color: "red" }}>{this.state.error}</Text>
+                  <Text style={styles.errorStyle}>{this.state.error}</Text>
                   <CardItem footer>
                     <Left />
                     <Right>
@@ -349,6 +364,10 @@ const styles = {
     lineHeight: 24,
     letterSpacing: 0,
     color: "#ffffff"
+  },
+  errorStyle: {
+    color: "red",
+    marginLeft: 20
   },
   dateText: {
     height: 16,
