@@ -4,7 +4,7 @@ import { Routes } from "./routes/todoRoutes";
 //importing all routes of todo app
 import { Client } from "pg";
 //importing Client from postgresql (elephantsql: postgresql as a service)
-
+//Heroku
 class App {
   // declaring and initializing
   public app: express.Application;
