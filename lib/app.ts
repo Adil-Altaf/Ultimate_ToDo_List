@@ -9,8 +9,11 @@ class App {
   // declaring and initializing
   public app: express.Application;
   public routePrv: Routes = new Routes();
-  public postUrl: string =
-    "postgres://jjczkcpp:vCol1kmHUXJo8ID7gzHbqzcJS5AGidFR@pellefant.db.elephantsql.com:5432/jjczkcpp";
+  public postUrl: any = {
+    connectionString: "postgres://rdgqlzgqkeuxqz:8b89bd358daa419edf7f5f8b879cde3fd53db22b6eb42f0aa3be51b6de8390a4@ec2-54-225-241-25.compute-1.amazonaws.com:5432/d7knd1j7cm9u4c",
+    ssl: true,
+  }
+    //"postgres://jjczkcpp:vCol1kmHUXJo8ID7gzHbqzcJS5AGidFR@pellefant.db.elephantsql.com:5432/jjczkcpp";
   // URL for connecting in elephantsql
 
   // declare the express constructor into app and also called config methods

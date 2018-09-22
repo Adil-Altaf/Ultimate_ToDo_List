@@ -22,7 +22,7 @@ describe("API Routes", function () {
         });
     });
     describe("GET /api/v1.0/tasks/:id", function () {
-        it("should return all tasks", function (done) {
+        it("should return one tasks", function (done) {
             chai
                 .request(server)
                 .get("/todo/api/v1.0/tasks/1")
@@ -36,7 +36,7 @@ describe("API Routes", function () {
         });
     });
     describe("POST /api/v1.0/tasks", function () {
-        it("should return all tasks", function (done) {
+        it("should post tasks", function (done) {
             chai
                 .request(server)
                 .post("/todo/api/v1.0/tasks")
@@ -57,7 +57,7 @@ describe("API Routes", function () {
         });
     });
     describe("PUT /api/v1.0/tasks/:id", function () {
-        it("should return all tasks", function (done) {
+        it("should update all tasks", function (done) {
             chai
                 .request(server)
                 .put("/todo/api/v1.0/tasks/3")
@@ -77,8 +77,8 @@ describe("API Routes", function () {
             });
         });
     });
-    describe("GET /api/v1.0/tasks/:id", function () {
-        it("should return all tasks", function (done) {
+    describe("DELETE /api/v1.0/tasks/:id", function () {
+        it("should delete all tasks", function (done) {
             chai
                 .request(server)
                 .delete("/todo/api/v1.0/tasks/1")
