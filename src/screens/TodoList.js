@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  Dimensions,
-  Modal,
-  View,
-  ListView
-} from "react-native";
+import { Dimensions, Modal, View, ListView, findNodeHandle } from "react-native";
 import {
   fetchTodos,
   postTodo,
@@ -12,6 +7,7 @@ import {
   doneTodo,
   updateTodo
 } from "../store/actions/index";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 import {
   Icon,
@@ -52,11 +48,9 @@ class TodoListScreen extends Component {
       listVisible: true,
       error: "",
       isUpdate: false,
-      todoId: null,
-      chosenDate: new Date()
+      todoId: null
     };
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
     const date = new Date();
     const monthArr = [
       "January",
@@ -144,6 +138,11 @@ class TodoListScreen extends Component {
     this.setState({ chosenDate: newDate });
   }
 
+  _scrollToInput = (reactNode) => {
+    // Add a 'scroll' ref to your ScrollView
+    this.scroll.props.scrollToFocusedInput(reactNode)
+  }
+
   render() {
     const { todos } = this.props;
     // console.log("TOdos emty: ", todos);
@@ -221,9 +220,7 @@ class TodoListScreen extends Component {
                   <Body>
                     {this.formatDate(todo.timestamp)}
                     <Text>{todo.title}</Text>
-                    <Text note>
-                      {todo.description}
-                    </Text>
+                    <Text note>{todo.description}</Text>
                   </Body>
                 </ListItem>
               )}
@@ -265,12 +262,20 @@ class TodoListScreen extends Component {
                 alignItems: "center"
               }}
             >
+              <KeyboardAwareScrollView 
+              enableOnAndroid={true}
+              extraHeight={10} 
+              innerRef={ref => {this.scroll = ref}} 
+              scrollEnabled>
               <View
                 style={{
+                  marginTop: 130,
                   width: 300,
-                  height: 300
+                  height: 300,
                 }}
               >
+              
+                
                 <Card>
                   <CardItem header>
                     <Left>
@@ -299,25 +304,37 @@ class TodoListScreen extends Component {
                   </CardItem>
                   <CardItem>
                     <Form>
-                      <Item stackedLabel style={styles.inputStyle}>
-                        <Label>Title</Label>
-                        <Input
-                          autoCorrect={false}
-                          value={this.state.title}
-                          onChangeText={text => this.setState({ title: text })}
-                        />
-                      </Item>
-                      <Item stackedLabel style={styles.inputStyle}>
-                        <Label>Description</Label>
-                        <Textarea
-                          rowSpan={5}
-                          autoCorrect={false}
-                          value={this.state.description}
-                          onChangeText={text =>
-                            this.setState({ description: text })
-                          }
-                        />
-                      </Item>
+                          <Item stackedLabel style={styles.inputStyle}>
+                            <Label>Title</Label>
+                            <Input
+                              autoCorrect={false}
+                              value={this.state.title}
+                              onChangeText={text =>
+                                this.setState({ title: text })
+                              }
+                              onFocus={(event) => {
+                                // `bind` the function if you're using ES6 classes
+                                this._scrollToInput(findNodeHandle(event.target))
+                              }}
+                            />
+                          </Item>
+                          <Item stackedLabel style={styles.inputStyle}>
+                            <Label>Description</Label>
+
+                            <Textarea
+                              rowSpan={5}
+                              autoCorrect={false}
+                              value={this.state.description}
+                              onChangeText={text =>
+                                this.setState({ description: text })
+                              }
+                              onFocus={(event) => {
+                                // `bind` the function if you're using ES6 classes
+                                this._scrollToInput(findNodeHandle(event.target))
+                              }}
+                            />
+                          </Item>
+                        
                     </Form>
                   </CardItem>
                   <Text style={styles.errorStyle}>{this.state.error}</Text>
@@ -332,12 +349,15 @@ class TodoListScreen extends Component {
                             : () => this.submitTodo()
                         }
                       >
-                        <Text>{this.state.isUpdate ? "Update" : "Create"}</Text>
+                        <Text>
+                          {this.state.isUpdate ? "Update" : "Create"}
+                        </Text>
                       </Button>
                     </Right>
                   </CardItem>
                 </Card>
               </View>
+              </KeyboardAwareScrollView>
             </View>
           </Modal>
         </Content>

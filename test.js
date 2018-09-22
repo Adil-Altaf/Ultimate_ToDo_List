@@ -38,12 +38,4 @@ describe("todos actions", () => {
       expect(store.getActions()).toEqual(expectedAction);
     });
   });
-  it("Delete todo action test", () => {
-      const expectedAction = [
-          {
-              type: DELETE_TODO,
-              id
-          }
-      ]
-  })
 });
