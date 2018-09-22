@@ -79,9 +79,10 @@ class TodoListScreen extends Component {
     this.props.fetchTodos();
   }
 
-  handleDeleteTodo(todoId) {
+  handleDeleteTodo(todoId, secId, rowId, rowMap) {
     try {
       this.props.deleteTodo(todoId);
+      rowMap[`${secId}${rowId}`].props.closeRow();
     } catch (err) {
       console.log(err);
     }
@@ -116,8 +117,8 @@ class TodoListScreen extends Component {
         modalVisible: false,
         title: "",
         description: "",
+        error: "",
         listVisible: true,
-        chosenDate: new Date()
       });
     } else if (this.state.title === "" && this.state.description === "") {
       this.setState({ error: "Please enter all fields" });
@@ -134,9 +135,7 @@ class TodoListScreen extends Component {
     console.log(dateStr);
   }
 
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
-  }
+
 
   _scrollToInput = (reactNode) => {
     // Add a 'scroll' ref to your ScrollView
@@ -224,10 +223,11 @@ class TodoListScreen extends Component {
                   </Body>
                 </ListItem>
               )}
-              renderLeftHiddenRow={todo => (
+              renderLeftHiddenRow={(todo, secId, rowId, rowMap) => (
+
                 <Button
                   full
-                  onPress={() => this.handleDeleteTodo(todo.id)}
+                  onPress={() => this.handleDeleteTodo(todo.id, secId, rowId, rowMap)}
                   style={{ backgroundColor: "red" }}
                 >
                   <Icon active name="delete" type="MaterialCommunityIcons" />
@@ -262,101 +262,102 @@ class TodoListScreen extends Component {
                 alignItems: "center"
               }}
             >
-              <KeyboardAwareScrollView 
-              enableOnAndroid={true}
-              extraHeight={10} 
-              innerRef={ref => {this.scroll = ref}} 
-              scrollEnabled>
-              <View
-                style={{
-                  marginTop: 130,
-                  width: 300,
-                  height: 300,
-                }}
-              >
-              
-                
-                <Card>
-                  <CardItem header>
-                    <Left>
-                      <Text>Add New Task</Text>
-                    </Left>
-                    <Right>
-                      <Button
-                        transparent
-                        onPress={() =>
-                          this.setState({
-                            modalVisible: false,
-                            listVisible: true,
-                            title: "",
-                            description: "",
-                            error: ""
-                          })
-                        }
-                      >
-                        <Icon
-                          name="close"
-                          type="MaterialCommunityIcons"
-                          style={{ color: "#10c1c1", paddingLeft: 10 }}
-                        />
-                      </Button>
-                    </Right>
-                  </CardItem>
-                  <CardItem>
-                    <Form>
-                          <Item stackedLabel style={styles.inputStyle}>
-                            <Label>Title</Label>
-                            <Input
-                              autoCorrect={false}
-                              value={this.state.title}
-                              onChangeText={text =>
-                                this.setState({ title: text })
-                              }
-                              onFocus={(event) => {
-                                // `bind` the function if you're using ES6 classes
-                                this._scrollToInput(findNodeHandle(event.target))
-                              }}
-                            />
-                          </Item>
-                          <Item stackedLabel style={styles.inputStyle}>
-                            <Label>Description</Label>
+              <KeyboardAwareScrollView
+                // enableOnAndroid={true}
+                extraHeight={10}
+                innerRef={ref => { this.scroll = ref }}
+                scrollEnabled>
+                <View
+                  style={{
+                    marginTop: 130,
+                    width: 300,
+                    height: 300,
+                  }}
+                >
 
-                            <Textarea
-                              rowSpan={5}
-                              autoCorrect={false}
-                              value={this.state.description}
-                              onChangeText={text =>
-                                this.setState({ description: text })
-                              }
-                              onFocus={(event) => {
-                                // `bind` the function if you're using ES6 classes
-                                this._scrollToInput(findNodeHandle(event.target))
-                              }}
-                            />
-                          </Item>
-                        
-                    </Form>
-                  </CardItem>
-                  <Text style={styles.errorStyle}>{this.state.error}</Text>
-                  <CardItem footer>
-                    <Left />
-                    <Right>
-                      <Button
-                        style={styles.btnStyle}
-                        onPress={
-                          this.state.isUpdate
-                            ? () => this.handleUpdateTodo()
-                            : () => this.submitTodo()
-                        }
-                      >
-                        <Text>
-                          {this.state.isUpdate ? "Update" : "Create"}
-                        </Text>
-                      </Button>
-                    </Right>
-                  </CardItem>
-                </Card>
-              </View>
+
+                  <Card>
+                    <CardItem header>
+                      <Left>
+                        <Text>Add New Task</Text>
+                      </Left>
+                      <Right>
+                        <Button
+                          transparent
+                          onPress={() =>
+                            this.setState({
+                              modalVisible: false,
+                              listVisible: true,
+                              title: "",
+                              description: "",
+                              error: ""
+                            })
+                          }
+                        >
+                          <Icon
+                            name="close"
+                            type="MaterialCommunityIcons"
+                            style={{ color: "#10c1c1", paddingLeft: 10, fontSize: 20 }}
+                          />
+                        </Button>
+                      </Right>
+                    </CardItem>
+                    <CardItem>
+                      <Form>
+                        <Item stackedLabel style={styles.inputStyle}>
+                          <Label>Title</Label>
+                          <Input
+                            autoCorrect={false}
+                            value={this.state.title}
+                            onChangeText={text =>
+                              this.setState({ title: text })
+                            }
+                            onFocus={(event) => {
+                              // `bind` the function if you're using ES6 classes
+                              this._scrollToInput(findNodeHandle(event.target))
+                            }}
+                          />
+                        </Item>
+                        <Item stackedLabel style={styles.inputStyle}>
+                          <Label>Description</Label>
+
+                          <Textarea
+                            style={{ marginLeft: -17, width: 250}}
+                            rowSpan={5}
+                            autoCorrect={false}
+                            value={this.state.description}
+                            onChangeText={text =>
+                              this.setState({ description: text })
+                            }
+                            onFocus={(event) => {
+                              // `bind` the function if you're using ES6 classes
+                              this._scrollToInput(findNodeHandle(event.target))
+                            }}
+                          />
+                        </Item>
+
+                      </Form>
+                    </CardItem>
+                    <Text style={styles.errorStyle}>{this.state.error}</Text>
+                    <CardItem footer>
+                      <Left />
+                      <Right>
+                        <Button
+                          style={styles.btnStyle}
+                          onPress={
+                            this.state.isUpdate
+                              ? () => this.handleUpdateTodo()
+                              : () => this.submitTodo()
+                          }
+                        >
+                          <Text>
+                            {this.state.isUpdate ? "Update" : "Create"}
+                          </Text>
+                        </Button>
+                      </Right>
+                    </CardItem>
+                  </Card>
+                </View>
               </KeyboardAwareScrollView>
             </View>
           </Modal>
