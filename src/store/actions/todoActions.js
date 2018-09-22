@@ -1,4 +1,4 @@
-import {GET_TASKS , GET_ERROR, ADD_TASK , UPDATE_TASK , DELETE_TASK} from './actionTypes';
+import {GET_TASKS , DONE_TASK, GET_ERROR, ADD_TASK , UPDATE_TASK , DELETE_TASK} from './actionTypes';
 import db from '../../config/firestore';
 
 export const getTasks = () => dispatch =>{
@@ -77,5 +77,15 @@ export const updateTask = (task) => dispatch =>{
     dispatch({
         type : UPDATE_TASK,
         snack : 'task has been updated'
+    })
+}
+
+
+export const doneTask = (id) => dispatch =>{
+    db.collection('tasks').doc(id).update({done : true}).then(() =>{
+        dispatch({
+            type : DONE_TASK,
+            snack : 'Tas has been done'
+        })
     })
 }

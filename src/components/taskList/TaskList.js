@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import TaskItem from '../taskItem/TaskItem';
 import {connect} from 'react-redux';
-import {getTasks , deleteTask , updateTask} from '../../store/actions/todoActions';
+import {getTasks , deleteTask , updateTask , doneTask} from '../../store/actions/todoActions';
 import UpdateDialog from '../dialog/Dialog';
+import Spinner from '../spinner/Spinner';
 class TaskList extends Component {
   constructor(props){
     super(props)
@@ -36,13 +37,14 @@ class TaskList extends Component {
 
     if(!tasks){
       content = (
-        <div>Loading....</div>
+        <Spinner/>
       )
     }else{
       content =(
         tasks.map((task) =>{
           return(
             <TaskItem
+             doneTask = {this.props.doneTask}
              openDialog = {this.openDialog} 
              deleteTask = {this.props.deleteTask} 
              key={task.id} 
@@ -78,4 +80,4 @@ const styles = {
   },
  
 }
-export default connect(mapStateToProps , {getTasks , deleteTask , updateTask})(TaskList);
+export default connect(mapStateToProps , {getTasks , doneTask , deleteTask , updateTask})(TaskList);
