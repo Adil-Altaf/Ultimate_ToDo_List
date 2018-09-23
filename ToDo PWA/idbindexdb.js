@@ -1,18 +1,24 @@
-var database_name = "toDoDatabase",
-  DBversion = 1,
+var database_name = "toDoDatabase";
+
+var DBversion = 1,
   tableName = "taskListTable";
 
 (function () {
   'use strict';
 
   //check for support
-  if (!('indexedDB' in window)) {
-    console.log('This browser doesn\'t support IndexedDB');
-    return;
+  try {
+    if (!('indexedDB' in window)) {
+      console.log('This browser doesn\'t support IndexedDB');
+      return;
+    }
+
+    createDB();
   }
- 
-  createDB();
-}) ();
+  catch{
+    console.log(Error);
+  }
+})();
 
 
 
@@ -95,24 +101,26 @@ function clearIndexDB_Data() {
     });
 }
 
-
 function getAll() {
   console.log("from indexdb IDB get function");
 
-  idb.open(database_name, DBversion).then(function (db) {
-    var tx = db.transaction(tableName, 'readonly');
-    var store = tx.objectStore(tableName);
-    return store.openCursor();
-  }).then(function logItems(cursor) {
-    if (!cursor) {
-      return;
-    }
+  idb.open(database_name, DBversion)
+    .then(function (db) {
+      var tx = db.transaction(tableName, 'readonly');
+      var store = tx.objectStore(tableName);
+      return store.openCursor();
+    })
+    .then(function logItems(cursor) {
+      if (!cursor) {
+        return;
+      }
 
-    addTask(cursor.value.task_id, cursor.value.taskTitle, cursor.value.taskDesc, cursor.value.status, false, false);
+      addTask(cursor.value.task_id, cursor.value.taskTitle, cursor.value.taskDesc, cursor.value.status, false, false);
 
-    return cursor.continue().then(logItems);
-  }).then(function () {
-    console.log('Done cursoring');
-  });
+      return cursor.continue().then(logItems);
+    })
+    .then(function () {
+      console.log('Done cursoring');
+    })
+    .catch(e => console.log("error", e));
 }
-

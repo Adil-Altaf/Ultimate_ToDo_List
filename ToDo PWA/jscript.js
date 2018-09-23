@@ -1,5 +1,5 @@
 var idCounter = 0;
-var fetchFromAPI = "https://api.github.com/users/zeeshanhanif/followers"; //REST API link will come here
+var fetchFromAPI = "https://mongonosql.herokuapp.com/todo/api/v1.0/tasks"; //REST API link will come here
 
 if ('serviceWorker' in navigator) {
     console.log("service worker found");
@@ -19,9 +19,28 @@ function clearFields() {
     document.getElementById("txtTitle").focus();
 }
 
-function addTask(id, title, desc, status, addToAPIFlag, addToIndexDB = true) {  // function to add task
+function addTask(id, title, desc, status, addToAPIFlag = false, addToIndexDB = true) {  // function to add task
     var img;
     var varOnClick;
+    var id = id;
+    //var idCounter = id;
+
+    if (addToAPIFlag) {
+        addRecordToServer(idCounter, title, desc).then(a => {
+            addTaskLocal(a._id, title, desc, false, addToIndexDB);
+        })
+            .catch(e => alert("Error: Record not added", e));
+
+    } else {
+        addTaskLocal(id, title, desc, status, addToIndexDB)
+    }
+}
+function addTaskLocal(id, title, desc, status, addToIndexDB = true) {  // function to add task    
+    if (addToIndexDB) {
+        addRecord(id, title, desc);          // add records to indexDB
+    }
+
+
     if (status) {
         img = "done";
         varOnClick = ""
@@ -38,16 +57,7 @@ function addTask(id, title, desc, status, addToAPIFlag, addToIndexDB = true) {  
     document.getElementById('tasksTableBody').innerHTML += htmlText;
 
 
-    idCounter = id;
     clearFields();
-
-
-    if (addToIndexDB) {
-        addRecord(idCounter, title, desc);          // add records to indexDB
-    }
-    if (addToAPIFlag) {
-        addRecordToServer(idCounter, title, desc);  // add records to Server (API)
-    }
 }
 
 function task_done(row_id) {
@@ -55,8 +65,8 @@ function task_done(row_id) {
     document.getElementById(row_id).setAttribute("onclick", "");
 
 
-    updateTaskStatus(Number(row_id.slice(8, row_id.length)));  // update task status at indexDB
-    updateTaskStatusToServer(Number(row_id.slice(8, row_id.length)));// update task status at server with API
+    updateTaskStatus(row_id.slice(8, row_id.length));  // update task status at indexDB
+    updateTaskStatusToServer(row_id.slice(8, row_id.length));// update task status at server with API
 }
 
 function delete_task(taskid) {  // this funciton is to delete to do task from list
@@ -73,9 +83,9 @@ function delete_task(taskid) {  // this funciton is to delete to do task from li
         }
     }
 
-    removeRecord(Number(taskid.slice(9, taskid.length))); // remove record from indexDB
+    removeRecord(taskid.slice(9, taskid.length)); // remove record from indexDB
 
-    removeRecordFromServer(Number(taskid.slice(9, taskid.length))); // remove record from Server (API)
+    removeRecordFromServer(taskid.slice(9, taskid.length)); // remove record from Server (API)
 }
 
 function validateTaskInput() {
@@ -97,7 +107,7 @@ function validateTaskInput() {
     }
 
     if (allOkFlag) {
-        addTask(++idCounter, varTaskTitle.value.trim(), varTaskDesc.value.trim(), false, true);
+        addTask(null, varTaskTitle.value.trim(), varTaskDesc.value.trim(), true, true);
     }
 }
 
@@ -138,9 +148,8 @@ function updatePage(data) {
     for (var i = 0; i < data.length; i++) {
         // adding all records received from server in form of json
 
-
         // field value to be adjusted according to JSON
-        addTask(data[i].id, data[i].login, data[i].login, false);
+        addTask(data[i]._id, data[i].title, data[i].description, data[i].done);
 
 
     }
@@ -148,21 +157,60 @@ function updatePage(data) {
 
 
 function updateTaskStatusToServer(t_id) {
+    const myPost = {
+        done: true
+    };
+    const options = {
+        method: 'PUT',
+        body: JSON.stringify(myPost),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
 
-    // REST API For update status will come here
-
-}
-
-function addRecordToServer(t_id, title, description) {
-
-    // REST API to Add new task will come here
+    var tmp = fetch(fetchFromAPI + "/" + t_id, options)
+        .then(res => res.json())
+        .then(res => res) //returning updated record
+        .catch(err => console.log('Error, with message:', err.statusText));
 
 }
 
 function removeRecordFromServer(t_id) {
+    const myPost = {
+        _id: t_id
+    };
 
-    // REST API to remove new task will come here
+    const options = {
+        method: 'DELETE'
+    };
 
+    fetch(fetchFromAPI + "/" + t_id, options)
+        .then(res => res.json())
+        .then(res => res)
+        .catch(err => console.log('Error, with message:', err.statusText));
 }
+
+
+function addRecordToServer(t_id, tmp_title, tmp_description) {
+    const myPost = {
+        title: tmp_title,
+        description: tmp_description
+    };
+
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(myPost),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    return fetch(fetchFromAPI, options)
+        .then(res => res.json())
+        .then(res => res)// returning auto generated ID from server
+        .catch(err => console.log('Error, with message:', err.statusText));
+}
+
+
 
 getData();
