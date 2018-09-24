@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Dimensions, Modal, View, ListView, findNodeHandle } from "react-native";
+import { Dimensions, Modal, View, ListView, findNodeHandle, Platform } from "react-native";
 import {
   fetchTodos,
   postTodo,
@@ -72,10 +72,12 @@ class TodoListScreen extends Component {
       date.getDate() +
       ", " +
       date.getFullYear();
-    this.setDate = this.setDate.bind(this);
   }
 
   componentDidMount() {
+    // setInterval(() => {
+    //   this.props.fetchTodos();
+    // }, 1000)
     this.props.fetchTodos();
   }
 
@@ -88,8 +90,9 @@ class TodoListScreen extends Component {
     }
   }
 
-  handleCheckTodo(todoId, todoDone) {
+  handleCheckTodo(todoId, todoDone, secId, rowId, rowMap) {
     this.props.doneTodo(todoId, todoDone);
+    rowMap[`${secId}${rowId}`].props.closeRow();
   }
 
   handleUpdateTodo() {
@@ -154,7 +157,7 @@ class TodoListScreen extends Component {
         style={styles.slideStyle}
         colors={["rgb(16, 193, 193)", "rgb(72, 68, 100)"]}
       >
-        <Header transparent style={{ marginTop: 20 }}>
+        <Header transparent style={{ marginTop: 20, width: "auto" }}>
           <Left>
             <Button
               transparent
@@ -162,7 +165,7 @@ class TodoListScreen extends Component {
             >
               <Icon
                 name="arrow-back"
-                style={{ color: "white", paddingLeft: 10 }}
+                style={{ color: "white" }}
               />
             </Button>
           </Left>
@@ -179,7 +182,7 @@ class TodoListScreen extends Component {
               <Icon
                 name="plus"
                 type="MaterialCommunityIcons"
-                style={{ color: "white", paddingLeft: 10 }}
+                style={{ color: "white" }}
               />
             </Button>
           </Right>
@@ -233,11 +236,11 @@ class TodoListScreen extends Component {
                   <Icon active name="delete" type="MaterialCommunityIcons" />
                 </Button>
               )}
-              renderRightHiddenRow={todo => (
+              renderRightHiddenRow={(todo, secId, rowId, rowMap) => (
                 <Button
                   full
                   style={{ backgroundColor: todo.done ? "red" : "green" }}
-                  onPress={() => this.handleCheckTodo(todo.id, todo.done)}
+                  onPress={() => this.handleCheckTodo(todo.id, todo.done, secId, rowId, rowMap)}
                 >
                   <Icon
                     active
@@ -263,23 +266,22 @@ class TodoListScreen extends Component {
               }}
             >
               <KeyboardAwareScrollView
-                // enableOnAndroid={true}
                 extraHeight={10}
                 innerRef={ref => { this.scroll = ref }}
                 scrollEnabled>
                 <View
                   style={{
                     marginTop: 130,
+                    marginBottom: "auto",
                     width: 300,
-                    height: 300,
+                    height: "auto",
+                    borderRadius: 5
                   }}
                 >
-
-
                   <Card>
                     <CardItem header>
                       <Left>
-                        <Text>Add New Task</Text>
+                        <Text>{this.state.isUpdate ? "Update Task" : "Create New Task"}</Text>
                       </Left>
                       <Right>
                         <Button
@@ -322,7 +324,7 @@ class TodoListScreen extends Component {
                           <Label>Description</Label>
 
                           <Textarea
-                            style={{ marginLeft: -17, width: 250}}
+                            style={{ marginLeft: -17, width: 250 }}
                             rowSpan={5}
                             autoCorrect={false}
                             value={this.state.description}
@@ -381,15 +383,16 @@ const styles = {
     backgroundColor: "#10c1c1"
   },
   titleHeader: {
-    width: SCREEN_WIDTH - 50,
-    height: 20,
+    width:250,
+    marginLeft: -15,
+    textAlign: "center",
+    height: "auto",
     fontFamily: "TamilSangamMN",
     fontSize: 20,
     fontWeight: "normal",
     fontStyle: "normal",
-    lineHeight: 24,
     letterSpacing: 0,
-    color: "#ffffff"
+    color: "#ffffff",
   },
   errorStyle: {
     color: "red",

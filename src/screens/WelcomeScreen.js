@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, Dimensions } from "react-native";
+import { Text, Dimensions, View } from "react-native";
 import { Button, Icon } from "native-base";
 import { LinearGradient } from "expo";
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -22,8 +22,11 @@ class WelcomeScreen extends Component {
           type="MaterialCommunityIcons"
           style={{ color: "white", fontSize: 120 }}
         />
+        <View style={{width: "auto"}}>
         <Text style={styles.textStyle}>ULTIMATE TODO APP</Text>
+        
         <Text style={styles.smallTextStyle}>created by team alpha</Text>
+        </View>
         <Button
           block
           style={styles.buttonStyle}
@@ -44,46 +47,49 @@ const styles = {
     width: SCREEN_WIDTH
   },
   smallTextStyle: {
-    width: 111,
-    height: 12,
+    width: "auto",
+    height: "auto",
     fontFamily: "TamilSangamMN",
     fontSize: 12,
     fontWeight: "normal",
     fontStyle: "normal",
-    lineHeight: 14,
     letterSpacing: 0,
     color: "#ffffff",
-    marginTop: 10,
-    marginLeft: 90
+    marginTop: 2,
+    // marginRight: -75,
+    textAlign: "right"
   },
   textStyle: {
-    width: 204,
-    height: 20,
+    width: "auto",
+    height: "auto",
+    margin: "auto",
     fontFamily: "TamilSangamMN",
     fontSize: 20,
     fontWeight: "normal",
     fontStyle: "normal",
     lineHeight: 24,
     letterSpacing: 0,
-    textAlign: "left",
-    color: "#ffffff"
+    color: "#ffffff",
+    textAlign: "center"
   },
   buttonStyle: {
     borderRadius: 8,
     backgroundColor: "#ffffff",
     shadowColor: "#484464",
+    width: 200,
     shadowOffset: {
       width: 0,
       height: 3
     },
+    // width: 200,
     shadowRadius: 6,
     shadowOpacity: 1,
     marginTop: 25,
-    marginLeft: 55,
-    marginRight: 55
+    marginLeft: "auto",
+    marginRight: "auto"
   },
   btnTextStyle: {
-    width: 50,
+    // width: 50,
     height: 18,
     fontFamily: "TamilSangamMN",
     fontSize: 16,
