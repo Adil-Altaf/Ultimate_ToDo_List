@@ -1,7 +1,7 @@
 import {GET_TASKS , DONE_TASK, GET_ERROR,
          ADD_TASK , UPDATE_TASK , DELETE_TASK , 
          GET_TASKS_SUCCESS , ADD_TASK_SUCCESS , 
-         DELETE_TASK_SUCCESS, UPDATE_TASK_SUCCESS}
+         DELETE_TASK_SUCCESS, UPDATE_TASK_SUCCESS, DONE_TASK_SUCCESS}
 from './actionTypes';
 
 
@@ -45,11 +45,11 @@ export const updateTaskSuccess = (updatedData) => {
 
 
 
-// export const doneTask = (id) => dispatch =>{
-//     db.collection('tasks').doc(id).update({done : true}).then(() =>{
-//         dispatch({
-//             type : DONE_TASK,
-//             snack : 'Tas has been done'
-//         })
-//     })
-// }
+export const doneTaskRequest = (task) => {
+    return{
+        type : DONE_TASK,
+        payload : task
+    }
+}
+
+export const doneTaskSuccess = () => ({type : DONE_TASK_SUCCESS})

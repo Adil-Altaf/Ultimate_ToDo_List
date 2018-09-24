@@ -51,13 +51,13 @@ const TaskItem = (props) => {
        <IconButton onClick = { ()=> props.openDialog(task)} color = 'primary'>
          <Edit/> 
        </IconButton>
-       <IconButton onClick = {()=> props.doneTask(task.id)} color = 'primary'>
+       <IconButton onClick = {()=> props.doneTask(props.task)} color = 'primary'>
          <Done/>
        </IconButton> 
        </div>
       ) : (<div>
         <span>Done</span> 
-        <IconButton onClick = {() => props.deleteTask(props.id)} color = 'primary'>
+        <IconButton onClick = {() => props.deleteTask(task.id)} color = 'primary'>
         <Delete/>
       </IconButton>
       </div>

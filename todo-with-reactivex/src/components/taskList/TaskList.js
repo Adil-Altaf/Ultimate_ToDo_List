@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TaskItem from '../taskItem/TaskItem';
 import {connect} from 'react-redux';
-import {getTasksRequest , deleteTaskRequest , updateTaskRequest} from '../../store/actions/todoActions';
+import {getTasksRequest , deleteTaskRequest , updateTaskRequest , doneTaskRequest} from '../../store/actions/todoActions';
 import UpdateDialog from '../dialog/Dialog';
 import Spinner from '../spinner/Spinner';
 class TaskList extends Component {
@@ -44,7 +44,7 @@ class TaskList extends Component {
         tasks.map((task) =>{
           return(
             <TaskItem
-             doneTask = {this.props.doneTask}
+             doneTask = {this.props.doneTaskRequest}
              openDialog = {this.openDialog} 
              deleteTask = {this.props.deleteTaskRequest} 
              key={task.id}
@@ -73,7 +73,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getTasksRequest: () => dispatch(getTasksRequest()),
     deleteTaskRequest: (id) => dispatch(deleteTaskRequest(id)),
-    updateTaskRequest : (updatedTask) => dispatch(updateTaskRequest(updatedTask))
+    updateTaskRequest : (updatedTask) => dispatch(updateTaskRequest(updatedTask)),
+    doneTaskRequest : (task) => dispatch(doneTaskRequest(task))
   }
 }
 

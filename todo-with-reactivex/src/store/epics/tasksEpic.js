@@ -4,7 +4,7 @@ import { ofType } from 'redux-observable';
 import axios from 'axios';
 import {switchMap , map , of , catchError, mergeMap, filter , merge } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
-import { GET_TASKS, ADD_TASK, DELETE_TASK, UPDATE_TASK } from '../actions/actionTypes';
+import { GET_TASKS, ADD_TASK, DELETE_TASK, UPDATE_TASK, DONE_TASK } from '../actions/actionTypes';
 
 
 export const getAllTaskEpic = (action$) => {
@@ -70,3 +70,21 @@ export const updateTaskEpic = (action$ , state$) => {
     )
 }
 
+export const doneTaskEpic = (action$) => {
+    return action$.pipe(
+        ofType(DONE_TASK),
+        mergeMap(action =>{
+            const doneTask = {
+                todoTitle : action.payload.title,
+                todoDescription : action.payload.description,
+                complete : true
+            }
+            return ajax.put(`http://team-alpha-todo.herokuapp.com/todo/api/v1.0/tasks/${action.payload.id}`,
+            doneTask,
+            { 'Content-Type': 'application/json' }
+            ).pipe(
+                map(() => AllAction.doneTaskSuccess())
+            )
+        })
+    )
+}
