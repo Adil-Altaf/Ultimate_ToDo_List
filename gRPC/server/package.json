@@ -1,0 +1,14 @@
+{
+  "name": "grpc_server",
+  "version": "1.0.0",
+  "description": "gRPC Node.js Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },  
+  "author": "Muhammad Kashif",
+  "license": "ISC",
+  "grpc": "1.1.2",
+  "google-protobuf": "3.2.0"
+}
