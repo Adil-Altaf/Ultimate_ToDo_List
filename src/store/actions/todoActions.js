@@ -12,13 +12,11 @@ export const getTasks = () => {
   return async dispatch => {
     try {
       const response = await axios.get(`${BASE_URL}todo/api/v1.0/tasks/`);
-      console.log("Response data: ", response.data);
       dispatch({
         type: GET_TASKS,
         payload: response.data
       });
     } catch (err) {
-      console.log('Error: ', err.message);
       dispatch({
         type: GET_ERROR,
         payload: err.message
@@ -28,16 +26,13 @@ export const getTasks = () => {
 };
 
 export const addTask = task => {
-  console.log('Task add: ', task)
   return async dispatch => {
     try {
       const response = await axios.post(`${BASE_URL}todo/api/v1.0/tasks/`, {
           todoTitle: task.title,
           todoDescription: task.description
       });
-      console.log('ADD TASK: ', response.data)
     } catch (err) {
-      console.log('Add error: ', err.message)
       dispatch({
         type: GET_ERROR,
         payload: err.message
@@ -66,7 +61,6 @@ export const deleteTask = id => {
 };
 
 export const updateTask = (task) => {
-    console.log('Task', task);
   return async dispatch => {
     try {
        await axios.put(`${BASE_URL}todo/api/v1.0/tasks/${task.id}`, {
@@ -77,7 +71,7 @@ export const updateTask = (task) => {
       dispatch({
         type: UPDATE_TASK,
         payload: {
-          id: task.id ,
+          id: task.id,
           todoTitle: task.title,
           todoDescription: task.description
         }
@@ -92,7 +86,6 @@ export const updateTask = (task) => {
 };
 
 export const doneTodo = (task) => {
-  // console.log('Complete: ', complete);
     return async dispatch => {
         try {
             await axios.put(`${BASE_URL}todo/api/v1.0/tasks/${task.id}`, {

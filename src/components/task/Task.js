@@ -73,4 +73,4 @@ const styles ={
     padding : 10
   }
 }
-export default  Task;
+export default Task;
