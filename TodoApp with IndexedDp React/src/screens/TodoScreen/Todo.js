@@ -4,7 +4,7 @@ import db from './dexie';
 import TodoList from './TodoList';
 
 class Todo extends Component {
-
+    //Initlize The Component State 
     constructor() {
         super();
         this.state = {
@@ -17,7 +17,7 @@ class Todo extends Component {
         this.edit = this.edit.bind(this);
         this.deleteList = this.deleteList.bind(this);
     }
-
+    //To get all Todos From IndexedDb
     componentDidMount() {
         const { exist } = this.state;
         db.table('todos')
@@ -39,15 +39,15 @@ class Todo extends Component {
     }
 
 
-
+    //To Handle Input
     updateTitle(title) {
         this.setState({ title: title })
     }
-
+    //To Handle Input
     updateDescription(description) {
         this.setState({ description: description });
     }
-
+    //To Submit Form
     submitForm(e) {
         e.preventDefault();
         const { title, description, todos, exist } = this.state;
@@ -73,7 +73,7 @@ class Todo extends Component {
 
         this.setState({ todos, title: '', description: '' });
     }
-
+    //To delete a specific todo from state and from indexed Db
     deleteList(index) {
         const { todos } = this.state;
         let updated = todos.filter((item, index1) => {
@@ -96,6 +96,7 @@ class Todo extends Component {
 
 
     }
+    //To Edit a specific todo
     edit(index) {
         const { todos } = this.state;
         todos[index].completed = !todos[index].completed;
@@ -108,7 +109,7 @@ class Todo extends Component {
                 console.log(x);
             });
     }
-
+    //Input Field for title and description
     inputField() {
         const { title, description } = this.state;
         return (
@@ -143,59 +144,16 @@ class Todo extends Component {
             </form>
         )
     }
-    unorderList() {
-        const { todos } = this.state;
-        return (
-            <div>
-
-                <ul className='listStyle'>
-                    {todos.map((list, index) => {
-                        return (
-                            <li key={index + list.title}>
-                                {list.completed ?
-                                    <span className='completed'>
-                                        {list.title}-{list.description}
-                                    </span>
-
-                                    :
-
-                                    <span className=''>
-                                        {list.title}-{list.description}
-                                    </span>
-
-
-                                }
-                                <span className="delete" >
-                                    {list.completed ?
-                                        <i className="fa fa-check-square-o actionButton edit1" onClick={() => this.edit(index)}></i>
-
-                                        :
-
-                                        <i className="fa fa-square-o actionButton edit1" onClick={() => this.edit(index)}></i>
-                                    }
-
-                                    <i className="fa fa-remove actionButton delete1" onClick={() => this.deleteList(index)} ></i>
-                                </span>
-                                <hr />
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-        )
-    }
-
-
 
     render() {
-        const {todos} = this.state;
+        const { todos } = this.state;
         return (
             <div style={{ textAlign: "center" }} >
                 <h1>
                     TodoApp
                 </h1>
                 {this.inputField()}
-                {/* {this.unorderList()} */}
+                {/* Breaking The Todos in Component */}
                 <TodoList todos={todos} edit={this.edit} deleteList={this.deleteList} />
             </div>
         )

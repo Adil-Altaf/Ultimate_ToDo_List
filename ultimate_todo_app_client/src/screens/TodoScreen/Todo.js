@@ -3,6 +3,7 @@ import '../../Style/todo.css';
 
 class Todo extends Component {
 
+    //Initlize The Component State
     constructor() {
         super();
         this.state = {
@@ -12,22 +13,22 @@ class Todo extends Component {
         }
         this.submitForm = this.submitForm.bind(this);
     }
-
+    //To Handle Input
     updateTitle(title) {
         this.setState({ title: title })
     }
-
+    //To Handle Input
     updateDescription(description) {
         this.setState({ description: description });
     }
-
+    //To Submit Form
     submitForm(e) {
         e.preventDefault();
         const { title, description, todos } = this.state;
         todos.push({ title, description, completed: false });
         this.setState({ todos, title: '', description: '' });
     }
-
+    //To delete a specific todo
     deleteList(index) {
         const { todos } = this.state;
         let updated = todos.filter((item, index1) => {
@@ -44,15 +45,16 @@ class Todo extends Component {
 
 
     }
+    //To Edit a specific todo
     edit(index) {
         const { todos } = this.state;
         todos[index].completed = !todos[index].completed;
         this.setState(todos);
     }
-
+    //input field for title and description
     inputField() {
         const { title, description } = this.state;
-        return (
+        return (//Creating from of Title And Description
             <form className="form" onSubmit={this.submitForm} >
                 <div>
                     <label style={{ marginRight: 2 }}>
@@ -86,7 +88,7 @@ class Todo extends Component {
     }
     unorderList() {
         const { todos } = this.state;
-        return (
+        return (//Todo List 
             <div>
 
                 <ul className='listStyle'>

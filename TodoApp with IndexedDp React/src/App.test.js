@@ -6,6 +6,13 @@ import App from './App';
 import Todo from './screens/TodoScreen/Todo';
 import NavBar from './component/NavBar/NavBar';
 
+/**
+ * Testing for react Components 
+ * if theay are rendaring without breing crash and
+ * creating a perfect snapshot 
+ */
+
+//To Test Navbar Component  
 describe('NavBar', () => {
     it('NavBar renders without crashing', () => {
         const div = document.createElement('div');
@@ -20,6 +27,8 @@ describe('NavBar', () => {
         expect(tree).toMatchSnapshot();
     });
 });
+
+//To Test  our main App Component  
 
 describe('App', () => {
     it('renders without crashing', () => {
@@ -36,6 +45,7 @@ describe('App', () => {
     });
 });
 
+//Test The Todo Component
 describe('Todos', () => {
     it('renders without crashing', () => {
         const div = document.createElement('div');
