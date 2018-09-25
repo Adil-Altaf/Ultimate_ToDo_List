@@ -145,12 +145,14 @@ class TodoListScreen extends Component {
   };
 
   render() {
-    const { todos } = this.props;
+    const { todos, error } = this.props;
     // console.log("TOdos emty: ", todos);
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     });
-
+    if (error) {
+      alert(error)
+    }
     return (
       <LinearGradientComponent slideStyle={styles.slideStyle}>
         <HeaderComponent

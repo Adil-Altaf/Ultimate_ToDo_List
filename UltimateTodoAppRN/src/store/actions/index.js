@@ -30,13 +30,10 @@ export const fetchTodos = () => {
         payload: arr
       });
     } catch (err) {
-      if (err.response.status === 500) {
         dispatch({
           type: ERROR,
-          payload: 'Connection failed'
+          payload: err.message
         });
-      }
-
     }
   };
 };
