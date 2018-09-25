@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Text, Dimensions, View } from "react-native";
+import { Text, View, Dimensions } from "react-native";
 import { Button, Icon } from "native-base";
-import { LinearGradient } from "expo";
+import LinearGradientComponent from "../components/LinearGradientComp";
+
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 class WelcomeScreen extends Component {
@@ -9,23 +10,18 @@ class WelcomeScreen extends Component {
     header: null
   };
 
-
-
   render() {
     return (
-      <LinearGradient
-        colors={["rgb(16, 193, 193)", "rgb(72, 68, 100)"]}
-        style={styles.slideStyle}
-      >
+      <LinearGradientComponent slideStyle={styles.slideStyle}>
         <Icon
           name="alpha"
           type="MaterialCommunityIcons"
           style={{ color: "white", fontSize: 120 }}
         />
-        <View style={{width: "auto"}}>
-        <Text style={styles.textStyle}>ULTIMATE TODO APP</Text>
-        
-        <Text style={styles.smallTextStyle}>created by team alpha</Text>
+        <View style={{ width: "auto" }}>
+          <Text style={styles.textStyle}>ULTIMATE TODO APP</Text>
+
+          <Text style={styles.smallTextStyle}>created by team alpha</Text>
         </View>
         <Button
           block
@@ -34,7 +30,7 @@ class WelcomeScreen extends Component {
         >
           <Text style={styles.btnTextStyle}>Lets go</Text>
         </Button>
-      </LinearGradient>
+      </LinearGradientComponent>
     );
   }
 }

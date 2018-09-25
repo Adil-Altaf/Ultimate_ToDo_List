@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { Dimensions, Modal, View, ListView, findNodeHandle, Platform } from "react-native";
+import {
+  Dimensions,
+  Modal,
+  View,
+  ListView,
+  findNodeHandle,
+} from "react-native";
 import {
   fetchTodos,
   postTodo,
@@ -7,16 +13,14 @@ import {
   doneTodo,
   updateTodo
 } from "../store/actions/index";
+import LinearGradientComponent from "../components/LinearGradientComp";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
 import {
   Icon,
-  Header,
   Left,
-  Body,
   Right,
   Button,
-  Title,
   Text,
   Card,
   CardItem,
@@ -27,10 +31,10 @@ import {
   Item,
   Input,
   Label,
-  Textarea,
-  ListItem
+  Textarea
 } from "native-base";
-import { LinearGradient } from "expo";
+import HeaderComponent from "../components/HeaderComp";
+import ListItemComponent from "../components/ListItem";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
@@ -75,9 +79,6 @@ class TodoListScreen extends Component {
   }
 
   componentDidMount() {
-    // setInterval(() => {
-    //   this.props.fetchTodos();
-    // }, 1000)
     this.props.fetchTodos();
   }
 
@@ -121,7 +122,7 @@ class TodoListScreen extends Component {
         title: "",
         description: "",
         error: "",
-        listVisible: true,
+        listVisible: true
       });
     } else if (this.state.title === "" && this.state.description === "") {
       this.setState({ error: "Please enter all fields" });
@@ -138,12 +139,10 @@ class TodoListScreen extends Component {
     console.log(dateStr);
   }
 
-
-
-  _scrollToInput = (reactNode) => {
+  _scrollToInput = reactNode => {
     // Add a 'scroll' ref to your ScrollView
-    this.scroll.props.scrollToFocusedInput(reactNode)
-  }
+    this.scroll.props.scrollToFocusedInput(reactNode);
+  };
 
   render() {
     const { todos } = this.props;
@@ -153,40 +152,13 @@ class TodoListScreen extends Component {
     });
 
     return (
-      <LinearGradient
-        style={styles.slideStyle}
-        colors={["rgb(16, 193, 193)", "rgb(72, 68, 100)"]}
-      >
-        <Header transparent style={{ marginTop: 20, width: "auto" }}>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("Welcome")}
-            >
-              <Icon
-                name="arrow-back"
-                style={{ color: "white" }}
-              />
-            </Button>
-          </Left>
-          <Body>
-            <Title style={styles.titleHeader}>ULTIMATE TODO APP</Title>
-          </Body>
-          <Right>
-            <Button
-              transparent
-              onPress={() =>
-                this.setState({ modalVisible: true, listVisible: false })
-              }
-            >
-              <Icon
-                name="plus"
-                type="MaterialCommunityIcons"
-                style={{ color: "white" }}
-              />
-            </Button>
-          </Right>
-        </Header>
+      <LinearGradientComponent slideStyle={styles.slideStyle}>
+        <HeaderComponent
+          backButtonPress={() => this.props.navigation.navigate("Welcome")}
+          addButtonPress={() =>
+            this.setState({ modalVisible: true, listVisible: false })
+          }
+        />
         <Text style={styles.dateText}>{this.dateStr}</Text>
         <Content style={{ marginTop: 20 }}>
           {todos === null ? (
@@ -202,35 +174,28 @@ class TodoListScreen extends Component {
               rightOpenValue={-75}
               dataSource={this.ds.cloneWithRows(todos)}
               renderRow={todo => (
-                <ListItem
-                  onLongPress={() =>
-                    this.setState({
-                      title: todo.title,
-                      description: todo.description,
-                      modalVisible: true,
-                      todoId: todo.id,
-                      listVisible: false,
-                      isUpdate: true
-                    })
-                  }
-                  thumbnail
-                  style={{
+                <ListItemComponent longPressHandle={() =>
+                  this.setState({
+                    title: todo.title,
+                    description: todo.description,
+                    modalVisible: true,
+                    todoId: todo.id,
+                    listVisible: false,
+                    isUpdate: true
+                  })}
+                  listItemStyle={{
                     backgroundColor: todo.done ? "#D3CCE3" : "#E9E4F0",
                     paddingRight: 18
                   }}
-                >
-                  <Body>
-                    {this.formatDate(todo.timestamp)}
-                    <Text>{todo.title}</Text>
-                    <Text note>{todo.description}</Text>
-                  </Body>
-                </ListItem>
+                  title={todo.title}
+                  description={todo.description} />
               )}
               renderLeftHiddenRow={(todo, secId, rowId, rowMap) => (
-
                 <Button
                   full
-                  onPress={() => this.handleDeleteTodo(todo.id, secId, rowId, rowMap)}
+                  onPress={() =>
+                    this.handleDeleteTodo(todo.id, secId, rowId, rowMap)
+                  }
                   style={{ backgroundColor: "red" }}
                 >
                   <Icon active name="delete" type="MaterialCommunityIcons" />
@@ -240,7 +205,15 @@ class TodoListScreen extends Component {
                 <Button
                   full
                   style={{ backgroundColor: todo.done ? "red" : "green" }}
-                  onPress={() => this.handleCheckTodo(todo.id, todo.done, secId, rowId, rowMap)}
+                  onPress={() =>
+                    this.handleCheckTodo(
+                      todo.id,
+                      todo.done,
+                      secId,
+                      rowId,
+                      rowMap
+                    )
+                  }
                 >
                   <Icon
                     active
@@ -267,8 +240,11 @@ class TodoListScreen extends Component {
             >
               <KeyboardAwareScrollView
                 extraHeight={10}
-                innerRef={ref => { this.scroll = ref }}
-                scrollEnabled>
+                innerRef={ref => {
+                  this.scroll = ref;
+                }}
+                scrollEnabled
+              >
                 <View
                   style={{
                     marginTop: 130,
@@ -281,7 +257,11 @@ class TodoListScreen extends Component {
                   <Card>
                     <CardItem header>
                       <Left>
-                        <Text>{this.state.isUpdate ? "Update Task" : "Create New Task"}</Text>
+                        <Text style={{ color: "#10c1c1", fontWeight: "bold" }}>
+                          {this.state.isUpdate
+                            ? "Update Task"
+                            : "Create New Task"}
+                        </Text>
                       </Left>
                       <Right>
                         <Button
@@ -299,7 +279,7 @@ class TodoListScreen extends Component {
                           <Icon
                             name="close"
                             type="MaterialCommunityIcons"
-                            style={{ color: "#10c1c1", paddingLeft: 10, fontSize: 20 }}
+                            style={{ color: "#10c1c1", fontSize: 25 }}
                           />
                         </Button>
                       </Right>
@@ -314,9 +294,9 @@ class TodoListScreen extends Component {
                             onChangeText={text =>
                               this.setState({ title: text })
                             }
-                            onFocus={(event) => {
+                            onFocus={event => {
                               // `bind` the function if you're using ES6 classes
-                              this._scrollToInput(findNodeHandle(event.target))
+                              this._scrollToInput(findNodeHandle(event.target));
                             }}
                           />
                         </Item>
@@ -331,13 +311,11 @@ class TodoListScreen extends Component {
                             onChangeText={text =>
                               this.setState({ description: text })
                             }
-                            onFocus={(event) => {
-                              // `bind` the function if you're using ES6 classes
-                              this._scrollToInput(findNodeHandle(event.target))
+                            onFocus={event => {
+                              this._scrollToInput(findNodeHandle(event.target));
                             }}
                           />
                         </Item>
-
                       </Form>
                     </CardItem>
                     <Text style={styles.errorStyle}>{this.state.error}</Text>
@@ -364,7 +342,7 @@ class TodoListScreen extends Component {
             </View>
           </Modal>
         </Content>
-      </LinearGradient>
+      </LinearGradientComponent>
     );
   }
 }
@@ -381,18 +359,6 @@ const styles = {
   btnStyle: {
     borderRadius: 5,
     backgroundColor: "#10c1c1"
-  },
-  titleHeader: {
-    width:250,
-    marginLeft: -15,
-    textAlign: "center",
-    height: "auto",
-    fontFamily: "TamilSangamMN",
-    fontSize: 20,
-    fontWeight: "normal",
-    fontStyle: "normal",
-    letterSpacing: 0,
-    color: "#ffffff",
   },
   errorStyle: {
     color: "red",
