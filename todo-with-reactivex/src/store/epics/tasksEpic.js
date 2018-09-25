@@ -1,8 +1,6 @@
 import * as AllAction from '../actions/todoActions';
-import { Observable } from 'rxjs';
 import { ofType } from 'redux-observable';
-import axios from 'axios';
-import {switchMap , map , of , catchError, mergeMap, filter , merge } from 'rxjs/operators';
+import {map , mergeMap} from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
 import { GET_TASKS, ADD_TASK, DELETE_TASK, UPDATE_TASK, DONE_TASK } from '../actions/actionTypes';
 
@@ -70,10 +68,11 @@ export const updateTaskEpic = (action$ , state$) => {
     )
 }
 
-export const doneTaskEpic = (action$) => {
+export const doneTaskEpic = (action$ , state$) => {
     return action$.pipe(
         ofType(DONE_TASK),
         mergeMap(action =>{
+            const doneResponse = state$.value.TaskReducer.doneTask;
             const doneTask = {
                 todoTitle : action.payload.title,
                 todoDescription : action.payload.description,
@@ -83,7 +82,7 @@ export const doneTaskEpic = (action$) => {
             doneTask,
             { 'Content-Type': 'application/json' }
             ).pipe(
-                map(() => AllAction.doneTaskSuccess())
+                map(() => AllAction.doneTaskSuccess(doneResponse))
             )
         })
     )

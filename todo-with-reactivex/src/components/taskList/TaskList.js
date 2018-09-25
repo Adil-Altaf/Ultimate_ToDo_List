@@ -3,7 +3,6 @@ import TaskItem from '../taskItem/TaskItem';
 import {connect} from 'react-redux';
 import {getTasksRequest , deleteTaskRequest , updateTaskRequest , doneTaskRequest} from '../../store/actions/todoActions';
 import UpdateDialog from '../dialog/Dialog';
-import Spinner from '../spinner/Spinner';
 class TaskList extends Component {
   constructor(props){
     super(props)

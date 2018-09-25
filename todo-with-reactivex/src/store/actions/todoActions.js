@@ -52,4 +52,15 @@ export const doneTaskRequest = (task) => {
     }
 }
 
-export const doneTaskSuccess = () => ({type : DONE_TASK_SUCCESS})
+export const doneTaskSuccess = (doneResponse) =>{
+    const doneTask = {
+        todotitle : doneResponse.title,
+        tododescription : doneResponse.description,
+        id : doneResponse.id,
+        complete : true
+    }
+    return{
+        type : DONE_TASK_SUCCESS , 
+        payload :doneTask
+    }
+}

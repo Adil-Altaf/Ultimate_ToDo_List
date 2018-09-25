@@ -11,7 +11,6 @@ import {
     DONE_TASK,
     DONE_TASK_SUCCESS
 } from '../actions/actionTypes';
-import { stat } from 'fs';
 
 const INITIAL_STATE = {
     tasks: [],
@@ -83,6 +82,9 @@ const TaskReducer = (state = INITIAL_STATE, action) => {
         case DONE_TASK_SUCCESS:
             return{
                 ...state,
+                tasks : state.tasks.map(task => {
+                    return task.id === action.payload.id ? {...action.payload} : task
+                }),
                 isLoading : false
             }
         case GET_ERROR:

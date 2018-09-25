@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-
 
 class Home extends Component {
   constructor(){
