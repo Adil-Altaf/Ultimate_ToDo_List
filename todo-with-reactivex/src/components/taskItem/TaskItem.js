@@ -10,9 +10,9 @@ const styles = theme =>
   console.log(theme) || {
     root : {
       marginBottom : '20px',
-      width : '800px',
-      height : '115px',
-      padding : "20px"
+      width : '60vw',
+      height : '120%',
+      padding : "20px",
     },
     done : {
       backgroundImage: 'linear-gradient(to left, #f4f4f4, #d5d5d5, #b8b7b7, #9c999a, #807d7d);',
@@ -41,7 +41,8 @@ const TaskItem = (props) => {
     <div className = {props.classes.mainContainer} >
       <Paper  elevation = {10} className = {!task.done ? props.classes.root : props.classes.done} >
       <h5>{task.title}</h5>
-      <p>{task.description}</p>
+      <p style={{ width: '40vw' }}>{task.description}</p>
+      <br/>
       <div className = {props.classes.icons} >
       {!task.done ? (
         <div>
