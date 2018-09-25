@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Ultimate ToDo List
+    </title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <!-- This div is for header banner -->
+    <div>
+        <img src="images/banner.jpg" alt="Banner Image" class="width100 borderShadow">
+    </div>
+
+    <!-- This div is for user input for task title and task description -->
+    <div id="userInputDiv" class="toDoList">
+        <fieldset class="width70 makeItCenter borderShadow">
+            <legend>
+                Add ToDo Task
+            </legend>
+            <table class="width100">
+                <tr>
+                    <td>
+                        <label for="txtTitle" class="fieldLabel font1_2">
+                            Task Title:
+                        </label>
+                        <input type="text" id="txtTitle" class="textFieldStyle" placeholder="Enter work ToDo title here....">
+                    </td>
+                    <td>
+                        <label for="txtDesc" class="fieldLabel font1_2">
+                            Task Description:
+                        </label>
+                        <textarea id="txtDesc" class="textFieldStyle" placeholder="Enter work to do detail here...."></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <br />
+                        <input type="button" value="Add Task" class="buttonStyle" onclick="validateTaskInput();">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+
+    <!-- This div will be dynamically grow as user will enter tasks -->
+    <div id="taskDetailDiv" class="toDoList">
+        <fieldset class="borderShadow">
+            <legend>
+                Task List
+            </legend>
+            <table id="taskDetails" class="width100 font1_2">
+                <thead class="makeItCenter">
+                    <tr class="bgDarkGray">
+                        <td>
+                            Task ID
+                        </td>
+                        <td>
+                            Task Title
+                        </td>
+
+                        <td>
+                            Task Description
+                        </td>
+
+                        <td>
+                            Task Status
+                        </td>
+
+                        <td>
+                            Delete Task
+                        </td>
+                    </tr>
+                </thead>
+                <tbody id="tasksTableBody">
+                    <!-- Dynamic rows will come here-->
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+
+
+    <script src="jscript.js"></script>
+</body>
+
+</html>

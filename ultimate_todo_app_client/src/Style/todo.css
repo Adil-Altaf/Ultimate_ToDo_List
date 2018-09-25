@@ -1,0 +1,25 @@
+.listStyle{
+    list-style: none;
+    padding-top: 10px
+}
+li{
+    font-size: 25px;
+    margin: 5px
+}
+.actionButton{
+    font-size: 35;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.delete1{
+    color: red
+}
+.edit1{
+    color: rgb(26, 212, 26)
+}
+.delete{
+    float: right;
+}
+.completed{
+    text-decoration: line-through;
+}
