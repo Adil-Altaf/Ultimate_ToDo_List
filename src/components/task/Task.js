@@ -18,8 +18,8 @@ class Task extends Component{
 
   render(){
     return (
-      <Grid container spacing={2}>
-        <Grid xs = {3} >
+      <Grid container item={true}>
+        <Grid xs={12} sm={12} md={3} item={true}>
         <div style = {styles.main_sidenav} >
           <h4>ULTIMATE TODO APP</h4>
           <p>created by team alpha</p>
@@ -28,7 +28,7 @@ class Task extends Component{
           <span onClick = {() => this.taskComponentChange(false)} style = {styles.taskInputButton} >Create Task</span>
         </div>
         </Grid>
-        <Grid style = {styles.rightSide} xs = {9} >
+        <Grid style = {styles.rightSide} xs={12} md={9} sm={12} item={true} >
         {this.state.taskComponent ?  <TaskList/> :<InputField taskComponentChange = {this.taskComponentChange} />  }
         </Grid>
       </Grid>

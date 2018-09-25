@@ -19,7 +19,14 @@ const styles = theme =>
     root: {
       padding: 50,
       width: '65%',
-      height : 400
+      height : 400,
+      [theme.breakpoints.down('sm')]: {
+        marginTop: -180
+    },
+    [theme.breakpoints.up('md')]: {
+    },
+    [theme.breakpoints.up('lg')]: {
+    },
     },
     textField : {
         width : '500px',
@@ -30,11 +37,27 @@ const styles = theme =>
         display : 'flex',
         flexDirection : 'row',
         justifyContent : 'flex-end',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
+        padding: theme.spacing.unit,
+        [theme.breakpoints.down('sm')]: {
+          marginLeft: 5
+        },
+        [theme.breakpoints.up('md')]: {
+        },
+        [theme.breakpoints.up('lg')]: {
+        },
     },
     button : {
         backgroundColor : '#10C1C1',
-        margin : 5
+        margin : 5,
+        [theme.breakpoints.down('sm')]: {
+            width: '5%',
+            height: '5%' 
+          },
+          [theme.breakpoints.up('md')]: {
+          },
+          [theme.breakpoints.up('lg')]: {
+          },
     }
   };
 class InputField extends Component {
@@ -77,6 +100,7 @@ class InputField extends Component {
         onChange = {this.onChangeText}
         id="standard-with-placeholder"
         placeholder="Enter your task title"
+        style={{ width: '100%' }}
         className={classes.textField}
         margin="normal"
       />
@@ -89,16 +113,17 @@ class InputField extends Component {
        placeholder = "Enter your Description"
        id="standard-multiline-flexible"
        multiline
+       style={{ width: '100%' }}
        rowsMax="4"
        className={classes.textField}
        margin="normal"
       />
     
     <div className = {classes.buttonContainer} >
-      <Button onClick = {() => this.props.taskComponentChange(true)} variant="contained" size = 'large' color="primary" className = {classes.button}>
+      <Button onClick = {() => this.props.taskComponentChange(true)} variant="contained" size = 'medium' color="primary" className = {classes.button}>
         Cancle
       </Button>
-      <Button type = 'submit' variant="contained" size = 'large' color="primary" className = {classes.button}>
+      <Button type = 'submit' variant="contained" size = 'medium' color="primary" className = {classes.button}>
         ADD
       </Button>
       </div> 
