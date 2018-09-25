@@ -13,7 +13,6 @@ export const getTasks = () => {
   return async dispatch => {
     try {
       const response = await axios.get(`${BASE_URL}todo/api/v1.0/tasks/`);
-      console.log("Response data: ", response.data);
       dispatch({
         type: GET_TASKS,
         payload: response.data
@@ -64,7 +63,6 @@ export const deleteTask = id => {
 };
 
 export const updateTask = (task) => {
-    console.log('Task', task);
   return async dispatch => {
     try {
        await axios.put(`${BASE_URL}todo/api/v1.0/tasks/${task.id}`, {
@@ -90,7 +88,6 @@ export const updateTask = (task) => {
 };
 
 export const doneTodo = (todoId) => {
-  console.log(todoId.id)
   return async dispatch => {
     try {
         await axios.put(`${BASE_URL}todo/api/v1.0/tasks/${todoId.id}`, {
