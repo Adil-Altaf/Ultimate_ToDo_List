@@ -7,8 +7,8 @@ var expect = chai.expect;
 chai.use(chaiHttp);
 
 describe("API Routes", function() {
-  describe("GET /api/v1.0/tasks", function() {
-    it("should return all tasks", function(done) {
+  describe("getTodos GET /api/v1.0/tasks", function() {
+    it("should return all tasks and get status 200", function(done) {
       chai
         .request(server)
         .get("/todo/api/v1.0/tasks")
@@ -22,13 +22,44 @@ describe("API Routes", function() {
     });
   });
 
-  describe("GET /api/v1.0/tasks/:id", function() {
-    it("should return one tasks", function(done) {
+  describe("getTodos GET /api/v1.0/tasks", function() {
+    it("should return all tasks and get an array", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks")
+        .then(function (res) {
+          expect(res.body).to.be.a('array');
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+  
+
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should return one task", function(done) {
       chai
         .request(server)
         .get("/todo/api/v1.0/tasks/1")
         .then(function (res) {
           expect(res).to.have.status(200);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should return one task and get an array", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/1")
+        .then(function (res) {
+          expect(res.body).to.be.a('array');
           done();
        })
        .catch(function (err) {
