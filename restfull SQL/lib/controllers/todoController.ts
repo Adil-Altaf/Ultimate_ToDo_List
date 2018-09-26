@@ -15,6 +15,18 @@ export class TodoController {
       todoDescription,
       complete: false
     };
+
+    if (!todoTitle && !todoDescription) {
+      return res.status(400).json({ success: false, error: "Both fields are Missing" });
+    }
+
+    if (!todoTitle) {
+      return res.status(400).json({ success: false, error: "Title is Missing" });
+    }
+    if (!todoDescription) {
+      return res.status(400).json({ success: false, error: "Description is Missing" });
+    }
+
     const client: any = new Client(connectionString);
     client.connect(error => {
       if (error) {

@@ -12,7 +12,7 @@
     "heroku-postbuild": "npm build",
     "start": "node ./dist/server.js",
     "prod": "npm run build && npm run start",
-    "test": "mocha --timeout 15000 -r ts-node/register lib/test/**/*.spec.ts"
+    "test": "mocha --timeout 85000 -r ts-node/register lib/test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",

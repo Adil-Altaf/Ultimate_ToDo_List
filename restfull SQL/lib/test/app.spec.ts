@@ -59,6 +59,145 @@ describe("API Routes", function() {
     });
   });
 
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo
+    it("should post and get json confirmation", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "123",
+          todoDescription: "123",
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({success: true, msg: 'Todo Added Successfully'});
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo
+    it("should not post because title is missing", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoDescription: "123",
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({ success: false, error: "Title is Missing" });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo
+    it("should not post because Description is missing", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "123",
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({ success: false, error: "Description is Missing" });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo
+    it("should not post because Title and Description fields are missing", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({ success: false, error: "Both fields are Missing" });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo //400
+    it("should not post because Title is missing and returning status 400 (Bad Request)", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoDescription: "123",
+        })
+        .then(function (res) {
+          expect(res).to.have.status(400);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo //400
+    it("should not post because Description is missing and returning status 400 (Bad Request)", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "123",
+        })
+        .then(function (res) {
+          expect(res).to.have.status(400);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo //400
+    it("should not post because Title and Description fields are missing and returning status 400 (Bad Request)", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+        })
+        .then(function (res) {
+          expect(res).to.have.status(400);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
   describe("PUT /api/v1.0/tasks/:id", function() {
     it("should update all tasks", function(done) {
       chai
