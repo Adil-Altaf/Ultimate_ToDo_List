@@ -233,6 +233,48 @@ describe("API Routes", function() {
   });
 
   describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo
+    it("should not post because title is empty", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "",
+          todoDescription: "123",
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({ success: false, error: "Title is Missing" });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo
+    it("should not post because Description is empty", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "123",
+          todoDescription: "",
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({ success: false, error: "Description is Missing" });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
     //addNewTodo //400
     it("should not post because Title is missing and returning status 400 (Bad Request)", function(done) {
       chai
@@ -261,6 +303,48 @@ describe("API Routes", function() {
         .set("X-API-Key", "foobar")
         .send({
           todoTitle: "123",
+        })
+        .then(function (res) {
+          expect(res).to.have.status(400);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo //400
+    it("should not post because Title is empty and returning status 400 (Bad Request)", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "",
+          todoDescription: "123"
+        })
+        .then(function (res) {
+          expect(res).to.have.status(400);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("addNewTodo /api/v1.0/tasks", function() {
+    //addNewTodo //400
+    it("should not post because Description is empty and returning status 400 (Bad Request)", function(done) {
+      chai
+        .request(server)
+        .post("/todo/api/v1.0/tasks")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "123",
+          todoDescription: "",
         })
         .then(function (res) {
           expect(res).to.have.status(400);
