@@ -1,4 +1,4 @@
-let dbModel = require("../models/todo");
+let dbModel = require("../model/todo");
 let Todo = class {
   constructor(payload) {
     this.payload = payload;
