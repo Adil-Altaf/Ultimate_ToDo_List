@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 
 const todo = new Mongoose.Schema({
-  todo_id: {
+    id: {
     type: Number,
     required: true,
     unique: true

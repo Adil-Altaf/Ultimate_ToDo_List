@@ -2,7 +2,7 @@ syntax = "proto3";
 package todopkg; //Optional: unique package name.
 
 //Service definition and its methods
-service TodosService {
+service TodoService {
   rpc List (Empty) returns (TodoList);
   rpc Insert (Todo) returns (Empty);
   rpc Update (Todo) returns (Empty);
@@ -12,7 +12,7 @@ service TodosService {
 message Empty {} 
 
 message Todo {
-  int32 todo_id = 1;
+  int32 id = 1;
   string title = 2;
   string description = 3;
   bool done = 4;
@@ -23,5 +23,5 @@ message TodoList {
 }
 
 message TodoId {
-  int32 todo_id = 1;
+  int32 id = 1;
 }
