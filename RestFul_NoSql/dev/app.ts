@@ -11,7 +11,7 @@ class App {
     //making route object from Route class 
     public route: Routes = new Routes();
     //this is database url 
-    public mongoUrl: string = 'mongodb://localhost:27017/Ultimate_Todo_App'
+    public mongoUrl: string = 'mongodb://alpha:alpha12345@ds125932.mlab.com:25932/ultimate_todo';
 
     constructor() {
         this.app = express();
@@ -30,7 +30,12 @@ class App {
     //connect app with the database
     private mongoSetup(): void{
         mongoose.Promise = global.Promise;
-        mongoose.connect(this.mongoUrl , {useNewUrlParser : true});    
+        mongoose.connect(this.mongoUrl , {useNewUrlParser : true}, (err, client) => {
+            if (err) {
+              console.log(err);
+            }
+            console.log('connect!!!');
+          });    
     }
 
 }
