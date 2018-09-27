@@ -65,7 +65,7 @@ describe("getTask GET /api/v1.0/tasks/:id", function() {
   });
 });
 
-describe("getTask GET /api/v1.0/tasks/:id", function() {
+describe("getTask GET /api/v1.0/tasks/5baa4f0d52913200157a9c73", function() {
   it("should return and include title, description & complete", function(done) {
     chai
       .request(server)
@@ -339,6 +339,76 @@ describe("addNewTask /api/v1.0/tasks", function() {
         })
       .then(function (res) {
         expect(res).to.have.status(400);
+        done();
+     })
+     .catch(function (err) {
+        throw err;
+     });
+  });
+});
+
+describe("updateTodo PUT /api/v1.0/tasks/", function() {
+  it("should update one task and get status 200", function(done) {
+    chai
+      .request(server)
+      .put("/todo/api/v1.0/tasks/5baa4f0d52913200157a9c73")
+      .set("X-API-Key", "foobar")
+      .send({
+        title: "123",
+        description: "Description length must be greater than 20!",
+      })
+      .then(function (res) {
+        expect(res).to.have.status(200);
+        done();
+     })
+     .catch(function (err) {
+        throw err;
+     });
+  });
+});
+
+describe("updateTodo PUT /api/v1.0/tasks/", function() {
+  it("should update one task and get array in return", function(done) {
+    chai
+      .request(server)
+      .put("/todo/api/v1.0/tasks/5baa4f0d52913200157a9c73")
+      .set("X-API-Key", "foobar")
+      .send({
+        title: "123",
+        description: "Description length must be greater than 20!",
+      })
+      .then(function (res) {
+        expect(res.body).to.be.a('object');
+        done();
+     })
+     .catch(function (err) {
+        throw err;
+     });
+  });
+});
+
+describe("DELETE /api/v1.0/tasks/", function() {
+  it("should delete one task and return status 200", function(done) {
+    chai
+      .request(server)
+      .delete("/todo/api/v1.0/tasks/5ba7c67f4e9f7800159b1d25")
+      .then(function (res) {
+        expect(res).to.have.status(200);
+        done();
+     })
+     .catch(function (err) {
+        throw err;
+     });
+  });
+});
+
+describe("DELETE /api/v1.0/tasks/:id", function() {
+  it("should delete one task and return json object", function(done) {
+    chai
+      .request(server)
+      .delete("/todo/api/v1.0/tasks/5ba7c67f4e9f7800159b1d25")
+      .then(function (res) {
+        expect(res.body).to.eql({ message: 'Successfully deleted Task!' });
         done();
      })
      .catch(function (err) {
