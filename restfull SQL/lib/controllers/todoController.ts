@@ -65,7 +65,6 @@ export class TodoController {
           .catch(err => {
             return res.json({ success: false, data: err.message });
           });
-
       })
   }
 
@@ -88,7 +87,6 @@ export class TodoController {
   }
 
   public updateTodo(req: Request, res: Response) {
-    const results = [];
     const id = req.params.id;
     const { todoTitle, todoDescription, complete } = req.body;
     const data = {
@@ -96,7 +94,6 @@ export class TodoController {
       todoDescription,
       complete
     };
-    console.log(data);
     const client = new Client(connectionString);
     client.connect(() => {
       client.query(
@@ -113,7 +110,6 @@ export class TodoController {
   }
 
   public deleteTodo(req: Request, res: Response) {
-    const results = [];
     const id = req.params.id;
     var client = new Client(connectionString);
     client.connect(() => {

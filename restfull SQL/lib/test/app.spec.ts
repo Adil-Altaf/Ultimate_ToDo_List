@@ -1,12 +1,53 @@
 export {};
 const chai = require("chai");
-const should = chai.should();
+import { Client } from "pg";
 const chaiHttp = require("chai-http");
 const server = require("../app").default;
 var expect = chai.expect;
 chai.use(chaiHttp);
 
 describe("API Routes", function() {
+
+    describe('Test for Databse Connectivity', function(){
+         it('should connect to database', function(done){
+          var client = new Client({
+            connectionString: "postgres://rdgqlzgqkeuxqz:8b89bd358daa419edf7f5f8b879cde3fd53db22b6eb42f0aa3be51b6de8390a4@ec2-54-225-241-25.compute-1.amazonaws.com:5432/d7knd1j7cm9u4c",
+            ssl: true,
+          });
+          client.connect(function(err) {
+            if (err) {
+              return console.error("could not connect to postgres", err);
+            }
+            client.end();
+            done();
+          });
+         });
+     })
+
+     describe('Test for Databse Connectivity', function(){
+      it('should connecting to database and running query', function(done){
+       var client = new Client({
+         connectionString: "postgres://rdgqlzgqkeuxqz:8b89bd358daa419edf7f5f8b879cde3fd53db22b6eb42f0aa3be51b6de8390a4@ec2-54-225-241-25.compute-1.amazonaws.com:5432/d7knd1j7cm9u4c",
+         ssl: true,
+       });
+       client.connect(function(err) {
+         if (err) {
+           return console.error("could not connect to postgres", err);
+         }
+         client.query(
+          "SELECT NOW()",
+          function(err) {
+            if (err) {
+              return console.error("error running query", err);
+            }
+            client.end();
+          }
+        );
+         done();
+       });
+      });
+  })
+
   describe("getTodos GET /api/v1.0/tasks", function() {
     it("should return all tasks and get status 200", function(done) {
       chai
@@ -45,6 +86,27 @@ describe("API Routes", function() {
         .get("/todo/api/v1.0/tasks/1")
         .then(function (res) {
           expect(res).to.have.status(200);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should return and include title, description & complete", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/128")
+        .then(function (res) {
+          expect(res.body[0]).to.be.an('object').that.includes({
+            id: 128,
+            todotitle: "123",
+            tododescription: "123",
+            tododate: null,
+            complete: false
+          });
           done();
        })
        .catch(function (err) {
@@ -229,8 +291,8 @@ describe("API Routes", function() {
     });
   });
 
-  describe("PUT /api/v1.0/tasks/:id", function() {
-    it("should update all tasks", function(done) {
+  describe("updateTodo PUT /api/v1.0/tasks/:id", function() {
+    it("should update one task and get status 200", function(done) {
       chai
         .request(server)
         .put("/todo/api/v1.0/tasks/3")
@@ -251,13 +313,49 @@ describe("API Routes", function() {
     });
   });
 
+  describe("updateTodo PUT /api/v1.0/tasks", function() {
+    //updateTodo
+    it("should update and get json confirmation", function(done) {
+      chai
+        .request(server)
+        .put("/todo/api/v1.0/tasks/123")
+        .set("X-API-Key", "foobar")
+        .send({
+          todoTitle: "124",
+          todoDescription: "123",
+        })
+        .then(function (res) {
+          expect(res.body).to.eql({success: true, msg: 'UPDATED!'});
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
   describe("DELETE /api/v1.0/tasks/:id", function() {
-    it("should delete all tasks", function(done) {
+    it("should delete one task and return status 200", function(done) {
       chai
         .request(server)
         .delete("/todo/api/v1.0/tasks/1")
         .then(function (res) {
           expect(res).to.have.status(200);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("DELETE /api/v1.0/tasks/:id", function() {
+    it("should delete one task and return json object", function(done) {
+      chai
+        .request(server)
+        .delete("/todo/api/v1.0/tasks/1")
+        .then(function (res) {
+          expect(res.body).to.eql({success: true, msg: 'DELETED!'});
           done();
        })
        .catch(function (err) {
