@@ -34,12 +34,17 @@ export class TodoController {
       }
       client
         .query(
-          "INSERT INTO todoList(todoTitle, todoDescription, complete) values($1, $2, $3)",
+          "INSERT INTO todoList(todoTitle, todoDescription, complete) values($1, $2, $3) RETURNING id",
           [data.todoTitle, data.todoDescription, data.complete]
         )
-        .then(result1 => {
-          client.end()
-          .then(()=> res.send({success: true, msg: 'Todo Added Successfully'}));
+        .then((resultId) => {
+          let id = resultId.rows[0].id
+
+          client.query('SELECT * FROM todoList where id=($1)', [id]).then((result) => {
+            console.log(result.rows[0]);
+            client.end()
+          .then(()=> res.status(200).send([result.rows[0], {success: true, msg: 'Todo Added Successfully'}]));
+          })
         })
         .catch(err => {
           return res.json({ success: false, data: err.message });

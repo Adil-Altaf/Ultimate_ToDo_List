@@ -5,6 +5,7 @@ const chaiHttp = require("chai-http");
 const server = require("../app").default;
 var expect = chai.expect;
 chai.use(chaiHttp);
+var TASKS, TASK, ID, TITLE, DESC, DONE;
 
 describe("API Routes", function() {
 
@@ -77,58 +78,6 @@ describe("API Routes", function() {
        });
     });
   });
-  
-
-  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
-    it("should return one task", function(done) {
-      chai
-        .request(server)
-        .get("/todo/api/v1.0/tasks/1")
-        .then(function (res) {
-          expect(res).to.have.status(200);
-          done();
-       })
-       .catch(function (err) {
-          throw err;
-       });
-    });
-  });
-
-  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
-    it("should return and include title, description & complete", function(done) {
-      chai
-        .request(server)
-        .get("/todo/api/v1.0/tasks/128")
-        .then(function (res) {
-          expect(res.body[0]).to.be.an('object').that.includes({
-            id: 128,
-            todotitle: "123",
-            tododescription: "123",
-            tododate: null,
-            complete: false
-          });
-          done();
-       })
-       .catch(function (err) {
-          throw err;
-       });
-    });
-  });
-
-  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
-    it("should return one task and get an array", function(done) {
-      chai
-        .request(server)
-        .get("/todo/api/v1.0/tasks/1")
-        .then(function (res) {
-          expect(res.body).to.be.a('array');
-          done();
-       })
-       .catch(function (err) {
-          throw err;
-       });
-    });
-  });
 
   describe("POST /api/v1.0/tasks", function() {
     it("should post tasks", function(done) {
@@ -144,6 +93,11 @@ describe("API Routes", function() {
         })
         .then(function (res) {
           expect(res).to.have.status(200);
+          ID = res.body[0].id;
+          TASK = res.body[0];
+          TITLE = res.body[0].todotitle;
+          DESC = res.body[0].tododescription;
+          DONE = res.body[0].complete;
           done();
        })
        .catch(function (err) {
@@ -164,7 +118,7 @@ describe("API Routes", function() {
           todoDescription: "123",
         })
         .then(function (res) {
-          expect(res.body).to.eql({success: true, msg: 'Todo Added Successfully'});
+          expect(res.body[1]).to.eql({success: true, msg: 'Todo Added Successfully'});
           done();
        })
        .catch(function (err) {
@@ -375,17 +329,66 @@ describe("API Routes", function() {
     });
   });
 
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should return one task", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/"+ID)
+        .then(function (res) {
+          expect(res).to.have.status(200);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should return and include title, description & complete", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/"+ID)
+        .then(function (res) {
+          expect(res.body[0]).to.be.an('object').that.includes({
+            id: ID,
+            todotitle: TITLE,
+            tododescription: DESC,
+            complete: DONE
+          });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should return one task and get an array", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/"+ID)
+        .then(function (res) {
+          expect(res.body).to.be.a('array');
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
   describe("updateTodo PUT /api/v1.0/tasks/:id", function() {
     it("should update one task and get status 200", function(done) {
       chai
         .request(server)
-        .put("/todo/api/v1.0/tasks/3")
+        .put("/todo/api/v1.0/tasks/"+ID)
         .set("X-API-Key", "foobar")
         .send({
-          _method: "put",
-          todoTitle: "123",
-          todoDescription: "123",
-          complete: false
+          todoTitle: TITLE,
+          todoDescription: DESC,
+          complete: DONE
         })
         .then(function (res) {
           expect(res).to.have.status(200);
@@ -397,16 +400,16 @@ describe("API Routes", function() {
     });
   });
 
-  describe("updateTodo PUT /api/v1.0/tasks", function() {
+  describe("updateTodo PUT /api/v1.0/tasks/:id", function() {
     //updateTodo
     it("should update and get json confirmation", function(done) {
       chai
         .request(server)
-        .put("/todo/api/v1.0/tasks/123")
+        .put("/todo/api/v1.0/tasks/"+ID)
         .set("X-API-Key", "foobar")
         .send({
-          todoTitle: "124",
-          todoDescription: "123",
+          todoTitle: TITLE,
+          todoDescription: DESC,
         })
         .then(function (res) {
           expect(res.body).to.eql({success: true, msg: 'UPDATED!'});
@@ -422,7 +425,7 @@ describe("API Routes", function() {
     it("should delete one task and return status 200", function(done) {
       chai
         .request(server)
-        .delete("/todo/api/v1.0/tasks/1")
+        .delete("/todo/api/v1.0/tasks/"+ID)
         .then(function (res) {
           expect(res).to.have.status(200);
           done();
@@ -437,7 +440,7 @@ describe("API Routes", function() {
     it("should delete one task and return json object", function(done) {
       chai
         .request(server)
-        .delete("/todo/api/v1.0/tasks/1")
+        .delete("/todo/api/v1.0/tasks/"+ID)
         .then(function (res) {
           expect(res.body).to.eql({success: true, msg: 'DELETED!'});
           done();
