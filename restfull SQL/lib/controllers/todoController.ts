@@ -83,8 +83,13 @@ export class TodoController {
       }
 
       client.query('SELECT * FROM todoList where id=($1)', [id]).then((result) => {
+        if(!result.rows[0]){
+          return res.status(404).json({ success: false, msg: "Task Not Found!" });  
+        }
         client.end()
-          .then(()=> res.status(200).json(result.rows));
+          .then(()=> {
+            return res.status(200).json(result.rows)
+          });
       }).catch((err) => {
       return res.status(500).json({ success: false, data: err.message });  
       })

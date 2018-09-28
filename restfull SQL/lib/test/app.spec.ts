@@ -379,6 +379,36 @@ describe("API Routes", function() {
     });
   });
 
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should not return one task and get Not Found error", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/090078601")
+        .then(function (res) {
+          expect(res.body).to.eql({ success: false, msg: "Task Not Found!" });
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
+  describe("getTodoWithID GET /api/v1.0/tasks/:id", function() {
+    it("should not return one task and get status 404", function(done) {
+      chai
+        .request(server)
+        .get("/todo/api/v1.0/tasks/090078601")
+        .then(function (res) {
+          expect(res).to.have.status(404);
+          done();
+       })
+       .catch(function (err) {
+          throw err;
+       });
+    });
+  });
+
   describe("updateTodo PUT /api/v1.0/tasks/:id", function() {
     it("should update one task and get status 200", function(done) {
       chai
