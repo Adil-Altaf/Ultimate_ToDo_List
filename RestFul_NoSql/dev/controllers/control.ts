@@ -62,10 +62,21 @@ export class TaskController {
 
     //This logic is for update task by finding task with its id and then update with new data provided
     public updateTask(req: Request, res: Response) {
+        
+        if(req.body.description){
+            if(req.body.description.length < 20){
+                return res.status(400).json({ success: false, msg: "Description length must be greater than 20!" });
+            }
+        }
+
         Task.findOneAndUpdate({ _id: req.params.task_id },
             req.body, { new: true }, (err, task) => {
                 if (err) {
                     return res.status(500).send(err);
+                }
+
+                if (!task) {
+                    return res.status(404).send({ message: 'Task Not Found!' });
                 }
                 return res.status(200).json(task);
             });
@@ -75,6 +86,9 @@ export class TaskController {
         Task.findOneAndDelete({ _id: req.params.task_id }, (err, task) => {
             if (err) {
                 return res.status(500).send(err);   
+            }
+            if(!task){
+                return res.status(404).json({ message: 'Task Not Found!' });
             }
             return res.status(200).json({ message: 'Successfully deleted Task!' });
         });
