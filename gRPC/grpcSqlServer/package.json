@@ -1,0 +1,19 @@
+{
+  "name": "grpcmongoserver",
+  "version": "1.0.0",
+  "description": "Ultimate Todolist mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
+    "google-protobuf": "^3.6.1",
+    "grpc": "^1.15.1",
+    "mongoose": "^5.2.17",
+    "pg": "^7.4.3",
+    "readline-sync": "^1.4.9"
+  }
+}
