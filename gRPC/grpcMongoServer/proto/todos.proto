@@ -4,7 +4,7 @@ service TodosService {
     rpc Insert (Todo) returns (Todo) {};
     rpc Get (TodoId) returns (Todo) {};
     rpc Remove (TodoId) returns (TodoSuccess) {};
-    rpc Update (Todo) returns (UpdatedTodo) {};
+    rpc Update (Todo) returns (Todo) {};
     rpc DoneTodo (Todo) returns (DoneTodoResponse) {};
 }
 
@@ -19,12 +19,6 @@ message TodoSuccess {
 message DoneTodoResponse {
     int32 id = 1;
     bool done = 2;
-}
-
-message UpdatedTodo {
-    int32 id = 1;
-    string title = 2;
-    string description = 3;
 }
 
 message Todo {
