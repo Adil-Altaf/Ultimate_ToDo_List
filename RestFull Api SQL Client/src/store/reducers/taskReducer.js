@@ -8,7 +8,6 @@ import {
 const INITIAL_STATE = {
   tasks: [],
   loader: false,
-  snack: ""
 };
 
 const TaskReducer = (state = INITIAL_STATE, action) => {
@@ -18,14 +17,14 @@ const TaskReducer = (state = INITIAL_STATE, action) => {
         ...state,
         tasks: action.payload
       };
-    case ADD_TASK:
-      return {
-        ...state,
-        tasks: state.tasks.push(action.payload)
-      }  
+    // case ADD_TASK:
+    //   return {
+    //     ...state,
+    //     tasks: state.tasks.push(action.payload)
+    //   }  
     case UPDATE_TASK:
-    console.log('update redu,', action.payload)
-    console.log('Update Tasks ', state.tasks);
+    // console.log('update redu,', action.payload)
+    // console.log('Update Tasks ', state.tasks);
       return {
         ...state,
         tasks: state.tasks.map(
