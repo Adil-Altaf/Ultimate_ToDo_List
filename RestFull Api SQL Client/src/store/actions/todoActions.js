@@ -28,7 +28,7 @@ export const getTasks = () => {
 export const addTask = task => {
   return async dispatch => {
     try {
-      const response = await axios.post(`${BASE_URL}todo/api/v1.0/tasks/`, {
+          await axios.post(`${BASE_URL}todo/api/v1.0/tasks/`, {
           todoTitle: task.title,
           todoDescription: task.description
       });
@@ -72,8 +72,8 @@ export const updateTask = (task) => {
         type: UPDATE_TASK,
         payload: {
           id: task.id,
-          todoTitle: task.title,
-          todoDescription: task.description
+          todoTitle: task.title || task.todoTitle  ,
+          todoDescription: task.description || task.todoDescription
         }
       });
     } catch (error) {
